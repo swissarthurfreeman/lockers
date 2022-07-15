@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "noImplicitAny": true,  // more robust type checking rules
+        "removeComments": false,
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",     // allows us to import without errors
+        "target": "ES6",
+        "outDir": "dist",
+        "baseUrl": ".",      // tells compiler to search from same directory as tsconfig.json
+        "paths": {
+            "*": ["node_modules/*"]
+        }
+    },
+    "include": [
+        "src/**/*" // ** means match all files in src's subdirectories recursively
+    ],
+    "exclude": [
+        "node_modules",
+        "test/**/*.ts"  // tests are executed via ts-node-dev using jit compilation for simplicity. 
+    ]
+}
