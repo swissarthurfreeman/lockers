@@ -1,5 +1,9 @@
 import express from "express";
-import { Sequelize, DataTypes, Model } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
+import { Contract } from "./domain/model/Contract";
+import { Locker } from "./domain/model/Locker";
+import { User } from "./domain/model/User";
+import { Location } from "./domain/model/Location";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -7,22 +11,14 @@ const sequelize = new Sequelize({
     password: 'test',
     username: 'root',
     database: 'lockers',
-    port: 3306
+    port: 3306,
+    models: [User, Contract, Location, Locker]
 });
+
 
 console.log("Hello World");
 const app = express();
 const port = 8080;
-
-const User = sequelize.define('User', {
-    firstName: {  // Model attributes are defined here
-        type: DataTypes.STRING,
-        allowNull: false // allowNull defaults to true
-    },
-    lastName: {
-        type: DataTypes.STRING
-    }
-})
 
 async function main() {
     await sequelize.sync({ force: true });
@@ -34,11 +30,10 @@ async function main() {
 }
 
 app.get("/", async (req, res) => {
-    const user = await User.create({"firstName": "Steve", "lastName": "Rody"});
+    const user = await User.create({"firstname": "Stéfave", "lastname": "Rody", "email": "lol@gmail.com"});
     res.send(user);
 });
 
-
 main();
 
-export { app };
+export { app, sequelize };

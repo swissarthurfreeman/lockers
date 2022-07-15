@@ -7,6 +7,8 @@
         "esModuleInterop": true,
         "moduleResolution": "node",     // allows us to import without errors
         "target": "ES6",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "outDir": "dist",
         "baseUrl": ".",      // tells compiler to search from same directory as tsconfig.json
         "paths": {
