@@ -1,0 +1,9 @@
+services:
+  database:
+    image: mysql
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: lockers
+    ports:
+      - 3306:3306
