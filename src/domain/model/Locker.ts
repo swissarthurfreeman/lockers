@@ -1,14 +1,16 @@
-import { Table, Column, Model, AllowNull, HasOne, Index, ForeignKey, DataType } from "sequelize-typescript";
-import { Contract } from "./Contract";
+import { Table, Column, Model, AllowNull, ForeignKey, BelongsTo, Index, PrimaryKey, IsUUID, DataType, Default } from "sequelize-typescript";
 import { Location } from "./Location";
 
-@Table
+@Table({timestamps: false})
 class Locker extends Model {
-    @ForeignKey(() => Contract)
-    uuid: string;
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    lockerId: string;
 
+    //@Index("unique-num-at-loc")
     @AllowNull(false)
-    @Column
+    @Column(DataType.INTEGER)
     number: number;
 
     @AllowNull(false)
@@ -19,8 +21,12 @@ class Locker extends Model {
     @Column
     lock: boolean;
 
-    @HasOne(() => Location)
-    location: Location;
+    //@BelongsTo(() => Location)
+    //location: Location;
+
+    //@Index("unique-num-at-loc")
+    //@ForeignKey(() => Location)
+    //locationId: number;
 }
 
 export { Locker };

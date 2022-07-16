@@ -1,15 +1,12 @@
-import { Table, Column, Model, AllowNull, Validate, ForeignKey, HasMany, IsEmail } from "sequelize-typescript";
-import isEmail from "validator/lib/isEmail";
-import { Contract } from "./Contract";
+import { Table, Column, Model, AllowNull, Validate, ForeignKey, HasMany, IsEmail, PrimaryKey, IsUUID, DataType, Default } from "sequelize-typescript";
 
-@Table
+@Table({timestamps: false})
 class User extends Model {
-    @ForeignKey(() => Contract) // reference that Contract can use and see
-    uuid: string;
-
-    //@HasMany(() => Contract)
-    //contracts: Contract[];
-
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    userId: string; // These names have to be the same accross models. Simply specifiying primary key is not enough.
+    
     @AllowNull(false)
     @Column
     firstname: string;
@@ -23,9 +20,9 @@ class User extends Model {
     @Column
     email: string;
 
-    @AllowNull(true)
     //eslint-disable-next-line
     @Validate({is: /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i})
+    @AllowNull(true)
     @Column
     phone_number: string;
 }

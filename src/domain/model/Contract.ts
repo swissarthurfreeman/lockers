@@ -1,18 +1,29 @@
-import { Table, Model, AllowNull, Column, HasOne } from "sequelize-typescript";
+import { Table, Model, AllowNull, Column, HasOne, BelongsTo, ForeignKey, PrimaryKey, IsUUID, DataType, Default } from "sequelize-typescript";
 import { Locker } from "./Locker";
 import { User } from "./User";
 
-@Table
+@Table({timestamps: false})
 class Contract extends Model {
-    @HasOne(() => User)
+    @BelongsTo(() => Locker)
+    locker: Locker;
+
+    @PrimaryKey
+    @ForeignKey(() => Locker)
+    @AllowNull(false)
+    @Column(DataType.UUID)
+    lockerId: string;
+
+    @BelongsTo(() => User)
     user: User;
 
-    @HasOne(() => Locker)
-    locker: Locker;
+    @ForeignKey(() => User)
+    @AllowNull(false)
+    @Column(DataType.UUID)
+    userId: string;
 
     @AllowNull(false)
     @Column
-    date: Date;
+    expiration: Date;
 }
 
 export { Contract };

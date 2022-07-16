@@ -3,8 +3,8 @@ import { Locker } from "./Locker";
 
 @Table
 class Location extends Model {
-    @ForeignKey(() => Locker)
-    uuid: string;
+    //@ForeignKey(() => Locker)
+    //uuid: string;
 
     @Index("unique-site-location")
     @AllowNull(false)
