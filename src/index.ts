@@ -23,15 +23,17 @@ const port = 8080;
 async function main() {
     await sequelize.sync({ force: true });
     console.log("All models were synchronized successfully.");
-
+    await User.create({"firstname": "Stéfave", "lastname": "Rody", "email": "lol@gmail.com"});
+    await User.create({"firstname": "Jean", "lastname": "Pittet", "email": "test@uge.com"});
+    
     app.listen(port, () => {
         console.log(`Server started at http://localhost:${port}`);
     });
 }
 
 app.get("/", async (req, res) => {
-    const user = await User.create({"firstname": "Stéfave", "lastname": "Rody", "email": "lol@gmail.com"});
-    res.send(user);
+    const users = await User.findAll();
+    res.send(users);
 });
 
 main();
