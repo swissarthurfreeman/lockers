@@ -12,7 +12,7 @@ const sequelize = new Sequelize({
     username: 'root',
     database: 'lockers',
     port: 3306,
-    models: [User, Contract, Locker]
+    models: [User, Contract, Location, Locker]
 });
 
 

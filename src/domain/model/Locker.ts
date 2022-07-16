@@ -8,7 +8,7 @@ class Locker extends Model {
     @Column(DataType.UUID)
     lockerId: string;
 
-    //@Index("unique-num-at-loc")
+    @Index("unique-num-at-loc")
     @AllowNull(false)
     @Column(DataType.INTEGER)
     number: number;
@@ -21,12 +21,12 @@ class Locker extends Model {
     @Column
     lock: boolean;
 
-    //@BelongsTo(() => Location)
-    //location: Location;
+    @BelongsTo(() => Location)
+    location: Location;
 
-    //@Index("unique-num-at-loc")
-    //@ForeignKey(() => Location)
-    //locationId: number;
+    @Index("unique-num-at-loc")
+    @ForeignKey(() => Location)
+    locationId: number;
 }
 
 export { Locker };
