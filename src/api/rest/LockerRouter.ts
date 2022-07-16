@@ -1,22 +1,20 @@
 import Router from "express";
 import { Locker } from "../../domain/model/Locker";
+import { LockerService } from "../../domain/service/LockerService";
 
 const LockerRouter = Router();
 
 LockerRouter.get('/', async (req, res) => {
-    const lockers = await Locker.findAll();
-    res.send(lockers);
-});
-
-LockerRouter.post('/', async (req, res) => {
-    console.log(req.body);  // TODO : check location exists
-    const newLocker = await Locker.create(req.body);    // TODO : wrap in transaction
-    res.send(newLocker);
+    res.send(await LockerService.getAll());
 });
 
 LockerRouter.get('/:id', async (req, res) => {
-    const locker = await Locker.findByPk(req.body.lockerId);    // TODO : add error management.
-    res.send(locker);
+    res.send(await LockerService.getById(req.params.id));
+});
+
+LockerRouter.post('/', async (req, res) => {
+    console.log(req.body);
+    res.send(await LockerService.create(Locker.build(req.body)));
 });
 
 LockerRouter.put('/:id', async (req, res) => {
