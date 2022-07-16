@@ -1,9 +1,14 @@
-import { Table, Model, AllowNull, Column, HasOne, BelongsTo, ForeignKey, PrimaryKey, IsUUID, DataType, Default } from "sequelize-typescript";
+import { Table, Model, AllowNull, Column, BelongsTo, ForeignKey, PrimaryKey, DataType, Default } from "sequelize-typescript";
 import { Locker } from "./Locker";
 import { User } from "./User";
 
 @Table({timestamps: false})
 class Contract extends Model {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    contractId: string;
+
     @BelongsTo(() => Locker)
     locker: Locker; // TODO : test to see if returning this as response aggregates the locker into the response too
 

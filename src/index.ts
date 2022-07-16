@@ -25,7 +25,10 @@ async function main() {
     console.log("All models were synchronized successfully.");
     await User.create({"firstname": "Stéfave", "lastname": "Rody", "email": "lol@gmail.com"});
     await User.create({"firstname": "Jean", "lastname": "Pittet", "email": "test@uge.com"});
-    
+    const loc = await Location.create({
+        site: "Sciences",
+        name: "Sciences-III"
+    });
     app.listen(port, () => {
         console.log(`Server started at http://localhost:${port}`);
     });

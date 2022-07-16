@@ -1,4 +1,4 @@
-import { Table, Column, Model, AllowNull, ForeignKey, BelongsTo, Index, PrimaryKey, IsUUID, DataType, Default } from "sequelize-typescript";
+import { Table, Column, Model, AllowNull, ForeignKey, BelongsTo, Index, PrimaryKey, DataType, Default } from "sequelize-typescript";
 import { Location } from "./Location";
 
 @Table({timestamps: false})

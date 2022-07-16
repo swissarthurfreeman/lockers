@@ -1,9 +1,9 @@
-import { Table, Model, AllowNull, Index, Column, ForeignKey, PrimaryKey } from "sequelize-typescript";
-import { Locker } from "./Locker";
+import { Table, Model, AllowNull, Index, Column, PrimaryKey, Default, DataType, AutoIncrement } from "sequelize-typescript";
 
 @Table
 class Location extends Model {
     @PrimaryKey
+    @AutoIncrement  // not automatically done for some reason
     @Column
     locationId: number;
 
