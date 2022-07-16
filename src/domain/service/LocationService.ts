@@ -1,21 +1,18 @@
+import { sequelize } from "../../index";
 import { Location } from "../model/Location";
 
-
 abstract class LocationService {
-
-    public static getAll(): Promise<Location[]> {
-        return Location.findAll();
-    }
-
-    public static getById(locationId: string): Promise<Location> {
-        return Location.findByPk(locationId);
-    }
-
-    public static create(location: Location): Promise<Location> {
-        // TODO : check location exists
-        // TODO : wrap in transaction
-        const newLocker = location.save();    
-        return newLocker;
+    public static async create(location: Location) {
+        try {
+            return await sequelize.transaction(async (t) => {
+                const createdLocation = await location.save({transaction: t});
+                console.log("Created Location =", createdLocation);
+                return createdLocation;
+            });
+        } catch(err) {
+            console.log(err);
+            return err.message; // To Do : configure error codes, messages etc...
+        }
     }
 }
 

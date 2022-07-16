@@ -1,13 +1,52 @@
 @host = http://127.0.0.1:8080
 
+###
+# @name locationPost
+POST {{host}}/locations
+Content-Type: application/json
+Accept: application/json
+
+{
+    "site": "Sciences", 
+    "name": "Sciences-III"
+}
+
+###
+@locationId = {{locationPost.response.body.$.locationId}}
+
+###
+GET {{host}}/locations
+Content-Type: application/json
+Accept: application/json
+
+###
+GET {{host}}/locations/{{locationId}}
+Content-Type: application/json
+Accept: application/json
+
+###
+# @name lockerPost
 POST {{host}}/lockers
 Content-Type: application/json
 Accept: application/json
 
 {
-    "number": 14, 
+    "number": 15, 
     "verticalPosition": "En bas",
     "lock": false,
     "locationId": 1
 }
+
+###
+@lockerId = {{lockerPost.response.body.$.lockerId}}
+
+###
+GET {{host}}/lockers
+Content-Type: application/json
+Accept: application/json
+
+###
+GET {{host}}/lockers/{{lockerId}}
+Content-Type: application/json
+Accept: application/json
 

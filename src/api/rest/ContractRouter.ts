@@ -11,7 +11,7 @@ ContractRouter.get('/', async (req, res) => {
 });
 
 ContractRouter.post('/', async (req, res) => {
-    console.log(req.body);  // TODO : check location exists
+    console.log(req.body);  // TODO : check location exists, check user exists, check locker exists
     const newLocker = await Contract.create(req.body);    // TODO : wrap in transaction
     res.send(newLocker);
 });

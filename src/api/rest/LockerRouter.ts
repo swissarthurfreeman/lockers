@@ -5,11 +5,11 @@ import { LockerService } from "../../domain/service/LockerService";
 const LockerRouter = Router();
 
 LockerRouter.get('/', async (req, res) => {
-    res.send(await LockerService.getAll());
+    res.send(await Locker.findAll());
 });
 
 LockerRouter.get('/:id', async (req, res) => {
-    res.send(await LockerService.getById(req.params.id));
+    res.send(await Locker.findByPk(req.params.id));
 });
 
 LockerRouter.post('/', async (req, res) => {

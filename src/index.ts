@@ -5,6 +5,7 @@ import { Locker } from "./domain/model/Locker";
 import { User } from "./domain/model/User";
 import { Location } from "./domain/model/Location";
 import { LockerRouter } from "./api/rest/LockerRouter";
+import { LocationRouter } from "./api/rest/LocationRouter";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -16,23 +17,17 @@ const sequelize = new Sequelize({
     models: [User, Contract, Location, Locker]
 });
 
-
-console.log("Hello World");
 const app = express();
 const port = 8080;
 
 app.use(express.json());    // tells express to parse bodies as json
 app.use('/lockers', LockerRouter);
+app.use('/locations', LocationRouter);
 
 async function main() {
     await sequelize.sync({ force: true });
     console.log("All models were synchronized successfully.");
-    await User.create({"firstname": "Stéfave", "lastname": "Rody", "email": "lol@gmail.com"});
-    await User.create({"firstname": "Jean", "lastname": "Pittet", "email": "test@uge.com"});
-    const loc = await Location.create({
-        site: "Sciences",
-        name: "Sciences-III"
-    });
+
     app.listen(port, () => {
         console.log(`Server started at http://localhost:${port}`);
     });

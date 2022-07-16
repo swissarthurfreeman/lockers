@@ -4,11 +4,11 @@ import { User } from "./User";
 
 @Table({timestamps: false})
 class Contract extends Model {
-    @PrimaryKey
+/*    @PrimaryKey // any reason as to why we'd need a uuid on Contract ? Redundant with locker uuid no ? 
     @Default(DataType.UUIDV4)
     @Column(DataType.UUID)
     contractId: string;
-
+*/
     @BelongsTo(() => Locker)
     locker: Locker; // TODO : test to see if returning this as response aggregates the locker into the response too
 
