@@ -1,4 +1,4 @@
-import { Table, Column, Model, AllowNull, Validate, ForeignKey, HasMany, IsEmail, PrimaryKey, IsUUID, DataType, Default } from "sequelize-typescript";
+import { Table, Column, Model, AllowNull, Validate, IsEmail, PrimaryKey, DataType, Default } from "sequelize-typescript";
 
 @Table({timestamps: false})
 class User extends Model {

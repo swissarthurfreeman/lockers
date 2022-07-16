@@ -8,7 +8,7 @@ class Locker extends Model {
     @Column(DataType.UUID)
     lockerId: string;
 
-    @Index("unique-num-at-loc")
+    @Index({name: 'unique-num-at-loc', type: 'UNIQUE', unique: true})
     @AllowNull(false)
     @Column(DataType.INTEGER)
     number: number;
@@ -23,8 +23,9 @@ class Locker extends Model {
 
     @BelongsTo(() => Location)
     location: Location;
-
-    @Index("unique-num-at-loc")
+    
+    // imposes unique column tuple constraint
+    @Index({name: 'unique-num-at-loc', type: 'UNIQUE', unique: true})
     @ForeignKey(() => Location)
     locationId: number;
 }
