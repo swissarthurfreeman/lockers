@@ -6,28 +6,29 @@ import { Locker } from "../../src/domain/model/Locker";
 import {Location} from "../../src/domain/model/Location";
 
 describe("Locker REST Resource Endpoints Tests", () => {
+    /*
     before(async () => {
+        // TODO : post location duh
+
+            const res = await request(app).get('/lockers');
         const loc = await Location.create({
             "site": "Sciences",
             "name": "Sciences-III"
         });
-        console.log("Created location is ", loc);
-
-        const locker1 = await Locker.create({
+        
+        await Locker.create({
             "number": 1, 
             "verticalPosition": "En hauteur",
             "lock": true,
             "locationId": 1
         });
-        console.log("Created locker is ", locker1);
 
-        const locker2 = await Locker.create({
+        await Locker.create({
             "number": 14, 
             "verticalPosition": "En bas",
             "lock": false,
             "locationId": 1
         });
-        console.log("Created location is ", locker2);
     });
     
     describe("/lockers endpoint test", () => {
@@ -53,5 +54,6 @@ describe("Locker REST Resource Endpoints Tests", () => {
         it("DELETE /lockers:id", async function() {
             console.log("Bouh");
         });
-    });
+    });*/
+    console.log("Hi");
 });

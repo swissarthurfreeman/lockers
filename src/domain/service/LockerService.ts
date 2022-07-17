@@ -8,12 +8,10 @@ abstract class LockerService {
             // returns last return value of nested callback.
             return await sequelize.transaction(async (t) => {
                 const location = await Location.findByPk(locker.locationId);
-                console.log(location);
                 if(location == null) {
                     return "Specified Location Does Not Exist";
                 } else {
                     const createdLocker = await locker.save({transaction: t});
-                    console.log("Created Locker =", createdLocker);
                     return createdLocker;
                 }
             });

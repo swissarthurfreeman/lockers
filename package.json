@@ -8,7 +8,7 @@
     "postbuild": "./node_modules/.bin/eslint ./dist/**/*.js",
     "prestart": "npm run build",
     "start": "ts-node-dev src/index.ts",
-    "test": "mocha -r ts-node/register test/**/*.ts"
+    "test": "mocha -r ts-node/register test/order.ts"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/swissarthurfreeman/lockers#readme",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",

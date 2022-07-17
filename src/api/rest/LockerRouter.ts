@@ -16,8 +16,13 @@ LockerRouter.get('/:id', async (req, res) => {
 });
 
 LockerRouter.post('/', async (req, res) => {
-    console.log(req.body);
-    res.send(await LockerService.create(Locker.build(req.body)));
+    LockerService.create(Locker.build(req.body))
+        .then((locker: Locker) => {
+            res.status(201).send(locker);
+        })
+        .catch((err) => {
+            res.status(400).send(err.message);
+        });
 });
 
 LockerRouter.put('/:id', async (req, res) => {

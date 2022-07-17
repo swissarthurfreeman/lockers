@@ -6,22 +6,23 @@ import { Location } from "./domain/model/Location";
 import { LockerRouter } from "./api/rest/LockerRouter";
 import { LocationRouter } from "./api/rest/LocationRouter";
 import { ContractRouter } from "./api/rest/ContractRouter";
+import { config } from "../Config";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    host: 'localhost',
-    password: 'test',
-    username: 'root',
-    database: 'lockers',
+    host: config.sqlConfig.host,
+    password: config.sqlConfig.password,
+    username: config.sqlConfig.user,
+    database: config.sqlConfig.database,
     port: 3306,
-    models: [Contract, Location, Locker]
+    models: [Contract, Location, Locker],
+    logging: false
 });
 
 const app = express();
 const port = 8080;
 
 app.use(express.json());    // tells express to parse bodies as json
-
 
 app.use('*', (req, res, next) => {
     req.body.user = {
@@ -37,9 +38,8 @@ app.use('/lockers', LockerRouter);
 app.use('/locations', LocationRouter);
 app.use('/contracts', ContractRouter);
 
-
 async function main() {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({force: true});
     console.log("All models were synchronized successfully.");
 
     app.listen(port, () => {
@@ -47,6 +47,8 @@ async function main() {
     });
 }
 
-main();
+if(config.id != 'test') {
+    main();
+}
 
-export { app, sequelize };
+export { main, app, sequelize };

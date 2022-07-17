@@ -6,7 +6,6 @@ abstract class LocationService {
         try {
             return await sequelize.transaction(async (t) => {
                 const createdLocation = await location.save({transaction: t});
-                console.log("Created Location =", createdLocation);
                 return createdLocation;
             });
         } catch(err) {

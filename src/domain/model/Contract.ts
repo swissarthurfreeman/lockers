@@ -1,7 +1,8 @@
-import { Table, Model, AllowNull, Column, addAttribute} from "sequelize-typescript";
+import { Table, Model, AllowNull, Column} from "sequelize-typescript";
 import { BelongsTo, ForeignKey, PrimaryKey} from "sequelize-typescript";
 import { DataType, Validate, Unique, IsEmail } from "sequelize-typescript";
 import { Locker } from "./Locker";
+import { ContractService } from "../service/ContractService";
 
 @Table({timestamps: false})
 class Contract extends Model {
@@ -41,10 +42,7 @@ class Contract extends Model {
     @Column({
         type: DataType.VIRTUAL,
         get(this: Contract): string {
-            return "occupied";
-        },
-        set(this: Contract): void {
-            this.setDataValue("status", "occupied");
+            return ContractService.status(this) // works with this
         }
     })
     status: string;

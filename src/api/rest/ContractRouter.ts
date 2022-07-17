@@ -6,17 +6,16 @@ import { ContractService } from "../../domain/service/ContractService";
 const ContractRouter = Router();
 
 ContractRouter.get('/', async (req, res) => {
-    const lockers = await Contract.findAll();
-    res.send(lockers);
+    const contracts = await Contract.findAll();
+    res.send(contracts);
 });
 
 ContractRouter.get('/:id', async (req, res) => {
     const contract = await Contract.findByPk(req.params.id, { include: Locker });
+    console.log(contract)
+    console.log(contract.status)
     if(contract == null)
         res.status(404);
-    console.log(`\n\n\n\n\n`);
-    console.log(contract.status);
-    console.log(`\n\n\n\n\n`);
     res.send(contract);
 });
 
@@ -32,12 +31,12 @@ ContractRouter.post('/', async (req, res) => {
                 firstname: req.body.user.firstname,
                 lastname: req.body.user.lastname,
                 email: req.body.user.email,
-                expiration: new Date()
+                expiration: ContractService.getExpirationDate()
             })
-        ).then((contract) => {
+        ).then((contract: Contract) => {
             res.status(201).send(contract);
-        }).catch((reason) => {
-            res.status(400).send(reason.message);
+        }).catch((err) => {
+            res.status(400).send(err.message);
         });
     }
 });

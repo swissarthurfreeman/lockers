@@ -18,6 +18,7 @@
     "rules": {
         "@typescript-eslint/no-var-requires": "off",
         "no-useless-escape": "off",
-        "no-cond-assign": "off"
+        "no-cond-assign": "off",
+        "require-yield": "off"
     }
 }

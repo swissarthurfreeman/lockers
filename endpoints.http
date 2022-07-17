@@ -8,7 +8,7 @@ Accept: application/json
 
 {
     "site": "Sciences", 
-    "name": "Sciences-III"
+    "name": "Sciences-IV"
 }
 
 ###
@@ -63,3 +63,9 @@ Accept: application/json
 GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
+
+###
+GET {{host}}/contracts/{{lockerId}}
+Content-Type: application/json
+Accept: application/json
+

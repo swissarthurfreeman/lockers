@@ -27,6 +27,8 @@ class Locker extends Model {
     // imposes unique column tuple constraint
     @Index({name: 'unique-num-at-loc', type: 'UNIQUE', unique: true})
     @ForeignKey(() => Location)
+    @AllowNull(false)
+    @Column
     locationId: number;
 }
 

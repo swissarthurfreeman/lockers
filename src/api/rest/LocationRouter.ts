@@ -13,8 +13,11 @@ LocationRouter.get('/:id', async (req, res) => {
 })
 
 LocationRouter.post('/', async (req, res) => {
-    console.log("POSTING LOCATION");
-    res.send(await LocationService.create(Location.build(req.body)));
+    LocationService.create(Location.build(req.body)).then((location: Location) => {
+        res.status(201).send(location);
+    }).catch((err) => {
+        res.status(400).send(err.message);
+    });
 });
 
 export { LocationRouter };
