@@ -1,4 +1,4 @@
-import { Table, Column, Model, AllowNull, Validate, IsEmail, PrimaryKey, DataType, Default } from "sequelize-typescript";
+import { Table, Column, Model, AllowNull, Validate, IsEmail, PrimaryKey, DataType, Default, Unique } from "sequelize-typescript";
 
 @Table({timestamps: false})
 class User extends Model {
@@ -16,6 +16,7 @@ class User extends Model {
     lastname: string;
 
     @AllowNull(false)
+    @Unique
     @IsEmail
     @Column
     email: string;

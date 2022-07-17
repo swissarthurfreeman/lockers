@@ -6,6 +6,7 @@ import { User } from "./domain/model/User";
 import { Location } from "./domain/model/Location";
 import { LockerRouter } from "./api/rest/LockerRouter";
 import { LocationRouter } from "./api/rest/LocationRouter";
+import { ContractRouter } from "./api/rest/ContractRouter";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -21,8 +22,22 @@ const app = express();
 const port = 8080;
 
 app.use(express.json());    // tells express to parse bodies as json
+
+
+app.use('*', (req, res, next) => {
+    req.body.user = {
+        group: "admin",
+        firstname: "John",
+        lastname: "Doe",
+        email: "john.doe@joe.com"
+    }
+    next();
+});
+
 app.use('/lockers', LockerRouter);
 app.use('/locations', LocationRouter);
+app.use('/contracts', ContractRouter);
+
 
 async function main() {
     await sequelize.sync({ force: true });

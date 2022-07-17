@@ -9,7 +9,10 @@ LockerRouter.get('/', async (req, res) => {
 });
 
 LockerRouter.get('/:id', async (req, res) => {
-    res.send(await Locker.findByPk(req.params.id));
+    const locker = await Locker.findByPk(req.params.id);    
+    if(locker == null) 
+        res.status(404);
+    res.send(locker);
 });
 
 LockerRouter.post('/', async (req, res) => {
