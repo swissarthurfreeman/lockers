@@ -50,3 +50,16 @@ GET {{host}}/lockers/{{lockerId}}
 Content-Type: application/json
 Accept: application/json
 
+###
+POST {{host}}/contracts
+Content-Type: application/json
+Accept: application/json
+
+{
+    "lockerId": "{{lockerId}}"
+}
+
+###
+GET {{host}}/contracts
+Content-Type: application/json
+Accept: application/json

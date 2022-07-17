@@ -1,6 +1,5 @@
 import { Locker } from "../model/Locker";
 import { Location } from "../model/Location";
-import { LocationService } from "./LocationService";
 import { sequelize } from "./../../index";
 
 abstract class LockerService {

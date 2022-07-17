@@ -1,7 +1,6 @@
 import Router from "express";
 import { Locker } from "../../domain/model/Locker";
 import { Contract } from "../../domain/model/Contract";
-import { User } from "../../domain/model/User";
 import { ContractService } from "../../domain/service/ContractService";
 
 const ContractRouter = Router();
@@ -12,42 +11,39 @@ ContractRouter.get('/', async (req, res) => {
 });
 
 ContractRouter.get('/:id', async (req, res) => {
-    const contract = await Contract.findByPk(req.params.id);
+    const contract = await Contract.findByPk(req.params.id, { include: Locker });
     if(contract == null)
         res.status(404);
+    console.log(`\n\n\n\n\n`);
+    console.log(contract.status);
+    console.log(`\n\n\n\n\n`);
     res.send(contract);
 });
 
 ContractRouter.post('/', async (req, res) => {
-    const locker = await Locker.findByPk(req.body.lockerId);
-    let user = await User.findOne({ where: { email: req.body.user.email }});    
+    const locker = await Locker.findByPk(req.body.lockerId);    
     if(locker == null) {
         res.status(400).send("Locker does not exist");
     } else {
-        if(user == null) {
-            user = await User.create({
+        // case where user creates a contract for himself
+        ContractService.create(
+            Contract.build({
+                lockerId: locker.lockerId,
                 firstname: req.body.user.firstname,
                 lastname: req.body.user.lastname,
-                email: req.body.user.email
-            });
-        }
-            ContractService.create(
-                Contract.build({
-                    lockerId: locker.lockerId,
-                    userId: createdUser.userId,
-                    expiration: new Date()
-                })
-            ).then((contract) => {
-                res.status(201).send(contract);
-            }).catch((reason) => {
-                res.status(400).send(reason.message);
-            });
-        }); 
+                email: req.body.user.email,
+                expiration: new Date()
+            })
+        ).then((contract) => {
+            res.status(201).send(contract);
+        }).catch((reason) => {
+            res.status(400).send(reason.message);
+        });
     }
 });
 
 ContractRouter.put('/:id', async (req, res) => {
-    const lockerToUpdate = await Contract.findByPk(req.params.id);    // TODO : add error management
+    const lockerToUpdate = await Contract.findByPk(req.params.id);    // TODO : add error management, wrap in transaction
     lockerToUpdate.set(req.body);
     const updatedLocker = await lockerToUpdate.save();      // TODO : add error management
     res.send(updatedLocker);

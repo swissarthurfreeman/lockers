@@ -1,14 +1,10 @@
-import { Table, Model, AllowNull, Column, BelongsTo, ForeignKey, PrimaryKey, DataType, Default } from "sequelize-typescript";
+import { Table, Model, AllowNull, Column, addAttribute} from "sequelize-typescript";
+import { BelongsTo, ForeignKey, PrimaryKey} from "sequelize-typescript";
+import { DataType, Validate, Unique, IsEmail } from "sequelize-typescript";
 import { Locker } from "./Locker";
-import { User } from "./User";
 
 @Table({timestamps: false})
 class Contract extends Model {
-/*    @PrimaryKey // any reason as to why we'd need a uuid on Contract ? Redundant with locker uuid no ? 
-    @Default(DataType.UUIDV4)
-    @Column(DataType.UUID)
-    contractId: string;
-*/
     @BelongsTo(() => Locker)
     locker: Locker; // TODO : test to see if returning this as response aggregates the locker into the response too
 
@@ -18,17 +14,40 @@ class Contract extends Model {
     @Column(DataType.UUID)
     lockerId: string;
 
-    @BelongsTo(() => User)
-    user: User;
-
-    @ForeignKey(() => User)
     @AllowNull(false)
-    @Column(DataType.UUID)
-    userId: string;
+    @Column
+    firstname: string;
+
+    @AllowNull(false)
+    @Column
+    lastname: string;
+
+    @AllowNull(false)
+    @Unique
+    @IsEmail
+    @Column
+    email: string;
+
+    //eslint-disable-next-line
+    @Validate({is: /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i})
+    @AllowNull(true)
+    @Column
+    phone_number: string;
 
     @AllowNull(false)
     @Column
     expiration: Date;
+
+    @Column({
+        type: DataType.VIRTUAL,
+        get(this: Contract): string {
+            return "occupied";
+        },
+        set(this: Contract): void {
+            this.setDataValue("status", "occupied");
+        }
+    })
+    status: string;
 }
 
 export { Contract };

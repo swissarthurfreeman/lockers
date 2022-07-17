@@ -2,7 +2,6 @@ import express from "express";
 import { Sequelize } from "sequelize-typescript";
 import { Contract } from "./domain/model/Contract";
 import { Locker } from "./domain/model/Locker";
-import { User } from "./domain/model/User";
 import { Location } from "./domain/model/Location";
 import { LockerRouter } from "./api/rest/LockerRouter";
 import { LocationRouter } from "./api/rest/LocationRouter";
@@ -15,7 +14,7 @@ const sequelize = new Sequelize({
     username: 'root',
     database: 'lockers',
     port: 3306,
-    models: [User, Contract, Location, Locker]
+    models: [Contract, Location, Locker]
 });
 
 const app = express();
@@ -47,11 +46,6 @@ async function main() {
         console.log(`Server started at http://localhost:${port}`);
     });
 }
-
-app.get("/", async (req, res) => {
-    const users = await User.findAll();
-    res.send(users);
-});
 
 main();
 
