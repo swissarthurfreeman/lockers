@@ -17,33 +17,16 @@ abstract class ContractService {
      * Get the status of a contract based on it's expiration.
      */
     public static status(of: Contract, now: Date = new Date()): string {
-        const contractExpirationDate = ContractService.getExpirationDate();
+        const contractExpirationDate = of.expiration;
         const contractRenewalDeadline = new Date(contractExpirationDate.getFullYear().toString() + config.contractRenewalDeadline);
-        console.log("\n\n\n RESOLVING STATUS \n\n\n");
-        if(now <= contractExpirationDate) {      // if this year's renewal window hasn't passed
 
-            if(of.expiration.getFullYear() < contractExpirationDate.getFullYear())
-                return "Breached";
-            else
-                return "Occupied";
-
+        if(now <= contractExpirationDate) {
+            return "Occupied";
         } else if (contractExpirationDate < now 
             && now < contractRenewalDeadline) {    // if we're in renewal window
-        
-            if(of.expiration.getFullYear() == contractExpirationDate.getFullYear())
-                return "NonRenewed"
-            
-            else if(of.expiration.getFullYear() > contractExpirationDate.getFullYear())
-                return "Occupied";
-            
-            else 
-                return "Breached";
-        
-        } else { // if we're outside this year's renewal window
-            if(of.expiration.getFullYear() <= now.getFullYear())
-                return "Breached";
-            else
-                return "Occupied";
+            return "NonRenewed"
+        } else { // if we're outside contract renewal window or not before that, it's a breach.
+            return "Breached";
         }
     }
 
@@ -52,15 +35,15 @@ abstract class ContractService {
      * @returns the resolved expiration date. 
      */
     public static getExpirationDate(now: Date = new Date()): Date {
-        const contractExpirationDate = new Date((new Date().getFullYear()).toString() + config.contractExpirationDate);
-        const contractRenewalDeadline = new Date((new Date().getFullYear()).toString() + config.contractRenewalDeadline);
+        const contractExpirationDate = new Date((now.getFullYear()).toString() + config.contractExpirationDate);
+        const contractRenewalDeadline = new Date((now.getFullYear()).toString() + config.contractRenewalDeadline);
         
         if(contractRenewalDeadline <= now || 
             (contractExpirationDate <= now && now <= contractRenewalDeadline)) {
-            const nextYear = new Date().getFullYear() + 1;
+            const nextYear = now.getFullYear() + 1;
             return new Date(nextYear.toString() + config.contractExpirationDate);
         } else if(now < contractExpirationDate) {
-            const currYear = new Date().getFullYear();
+            const currYear = now.getFullYear();
             return new Date(currYear.toString() + config.contractExpirationDate);
         }
     }
