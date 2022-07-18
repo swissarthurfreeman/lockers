@@ -1,52 +1,45 @@
 import { expect } from "chai";
 import { describe, it } from "mocha";
 import request from "supertest";
-import { Locker } from "../../src/domain/model/Locker";
-import { Location } from "../../src/domain/model/Location";
-import { main, app } from "../../src";
+import { app } from "../../src";
 
 describe("Contract Service Tests", () => {
-    before(async () => {
-        await main();
-        const locDestr = await Location.destroy({where: {}, force: true});
-        const lockDestr = await Locker.destroy({where: {}, force: true});
-    });
-
     describe("Contract Endpoint user Creates Contract use-case", async () => {
-        let lockerId: number;
-        let locationId: number;
         
-        it("Should Post a Locker", async () => {
+        it("Should Post a valid Contract", async () => {
             const lockerRes = await request(app)
-                .post('/lockers')
+                .get('/lockers?site=Sciences')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .send({
-                    "number": 14, 
-                    "verticalPosition": "En hauteur",
-                    "lock": true,
-                    "locationId": locationId
-                });
             
-            expect(lockerRes.status).equal(201);
-            expect(lockerRes.body.number).equal(14);
-            expect(lockerRes.body.lock).equal(true);
-            lockerId = lockerRes.body.lockerId;
-        });
+            const locker = lockerRes.body[0];
 
-        it("Should Post a Contract", async () => {
             const contractRes = await request(app)
                 .post('/contracts')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .send({
-                    "lockerId": lockerId
+                    "lockerId": locker.lockerId
                 });
             
             expect(contractRes.statusCode).equal(201);
             expect(contractRes.body.status).equal("Occupied");
+        });
+
+        it("Should not create a contract when locker does not exist", async () => {
+            const contractRes = await request(app)
+                .post('/contracts')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
+                .send({
+                    "lockerId": "akjsnfaskjgioaskdgjo"
+                });
+            
+            expect(contractRes.statusCode).equal(400);
+            expect(contractRes.body.message).equal("Locker does not exist");
         });  
     });
 });

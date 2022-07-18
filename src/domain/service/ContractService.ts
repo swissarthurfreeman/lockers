@@ -15,6 +15,8 @@ abstract class ContractService {
 
     /**
      * Get the status of a contract based on it's expiration.
+     * @param of contract to get the status of.
+     * @param now desired time of reference. Defaults to current time if unspecified. 
      */
     public static status(of: Contract, now: Date = new Date()): string {
         const contractExpirationDate = of.expiration;
@@ -32,6 +34,7 @@ abstract class ContractService {
 
     /**
      * Get the expiration date for a new contract created now.
+     * @param now desired time of reference. Defaults to current time if unspecified. 
      * @returns the resolved expiration date. 
      */
     public static getExpirationDate(now: Date = new Date()): Date {

@@ -62,14 +62,12 @@ describe("Locker REST Resource Endpoints Tests", async () => {
         });
 
         it("GET /lockers?site=SITE&name=NAME, should return all lockers at site", async () => {
-            console.log("GET /lockers?site=SITE&name=NAME, should return all lockers at site");
             const sciencesIIILockers: any = await request(app)
                 .get('/lockers?site=Sciences&name=Sciences-III')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
 
-            console.log(sciencesIIILockers.body);
             expect(sciencesIIILockers.body[0].location.site).equal('Sciences');
             expect(sciencesIIILockers.body[0].location.name).equal('Sciences-III');
 

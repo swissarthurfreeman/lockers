@@ -8,7 +8,7 @@ Accept: application/json
 
 {
     "site": "Sciences", 
-    "name": "Sciences-II"
+    "name": "EPA"
 }
 
 ###
@@ -40,14 +40,14 @@ Accept: application/json
     "number": 16, 
     "verticalPosition": "En bas",
     "lock": false,
-    "locationId": 1
+    "locationId": 5
 }
 
 ###
 @lockerId = {{lockerPost.response.body.$.lockerId}}
 
 ###
-GET {{host}}/lockers
+GET {{host}}/lockers?site=Sciences&name=EPA
 Content-Type: application/json
 Accept: application/json
 
