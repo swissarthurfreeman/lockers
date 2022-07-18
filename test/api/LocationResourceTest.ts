@@ -149,7 +149,7 @@ describe("Location REST Resource Endpoints Tests", () => {
         });
 
         it("DELETE /locations/:id, should delete location", async function() {
-            const dupUpdate = await request(app)    // updating to another Sciences-III at Sciences yields an error.
+            const dupUpdate = await request(app)
                 .delete('/locations/'+sciencesLoc2)
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")

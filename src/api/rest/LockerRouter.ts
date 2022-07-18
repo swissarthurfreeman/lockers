@@ -38,25 +38,23 @@ LockerRouter.post('/', async (req, res) => {
 });
 
 LockerRouter.put('/:id', async (req, res) => {
-    const lockerToUpdate = await Locker.findByPk(req.params.id);
-    if(lockerToUpdate == null) {
-        res.status(404).send({message: "Specified Locker does not exist"});
-    } else {
-        lockerToUpdate.set(req.body);
-        lockerToUpdate.save()
-            .then((locker: Locker) => {
-                res.status(200).send(locker);
-            })
-            .catch((err) => {
-                res.status(400).send({message: err.message});
-            });
-    }
+    LockerService.update(req.params.id, req.body)
+        .then((locker: Locker) => {
+            res.status(200).send(locker);
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        });
 });
 
 LockerRouter.delete('/:id', async (req, res) => {
-    const lockerToDestroy = await Locker.findByPk(req.params.id);
-    await lockerToDestroy.destroy();
-    res.status(204).send();
+    LockerService.destroy(req.params.id)
+        .then(() => {
+            res.status(200).send({message: "Locker successfully removed"});
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        });
 });
 
 export { LockerRouter };

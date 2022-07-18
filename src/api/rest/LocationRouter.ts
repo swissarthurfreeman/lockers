@@ -37,6 +37,7 @@ LocationRouter.post('/', async (req, res) => {
         });
 });
 
+// TODO : make sure no lockers at present at location.
 LocationRouter.delete('/:id', async (req, res) => {
     Location.destroy({where: {locationId: req.params.id}})
         .then(() => {

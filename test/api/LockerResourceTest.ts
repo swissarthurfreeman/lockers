@@ -5,6 +5,7 @@ import { app } from "../../src/index";
 
 describe("Locker REST Resource Endpoints Tests", async () => {
     describe("/lockers endpoint test", () => {
+        let toDeleteLockerId: string;
         it("POST /lockers, Should POST a locker", async () => {
             const locationRes = await request(app)  // db is conserved sequentially
                 .get('/locations')
@@ -49,6 +50,21 @@ describe("Locker REST Resource Endpoints Tests", async () => {
             expect(bilbosLockerRes.body.number).equal(1);
             expect(bilbosLockerRes.body.verticalPosition).equal("En bas");
             expect(bilbosLockerRes.body.lock).equal(false);
+
+            const toDeleteLocker = await request(app)  // db is conserved sequentially
+                .post('/lockers')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
+                .send({
+                    number: 10,
+                    verticalPosition: "En bas",
+                    lock: false,
+                    locationId: bagend.locationId
+                });
+        
+            expect(toDeleteLocker.status).equal(201);
+            toDeleteLockerId = toDeleteLocker.body.lockerId;
         });
 
         it("GET /lockers, should return all lockers", async () => {
@@ -58,11 +74,11 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
             
-            expect(lockers.body.length).equal(2);
+            expect(lockers.body.length).equal(3);
         });
 
         it("GET /lockers?site=SITE&name=NAME, should return all lockers at site", async () => {
-            const sciencesIIILockers: any = await request(app)
+            const sciencesIIILockers = await request(app)
                 .get('/lockers?site=Sciences&name=Sciences-III')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
@@ -71,7 +87,7 @@ describe("Locker REST Resource Endpoints Tests", async () => {
             expect(sciencesIIILockers.body[0].location.site).equal('Sciences');
             expect(sciencesIIILockers.body[0].location.name).equal('Sciences-III');
 
-            const bagendLockers: any = await request(app)
+            const bagendLockers = await request(app)
                 .get('/lockers?site=Shire&name=Bag-End')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
@@ -80,7 +96,7 @@ describe("Locker REST Resource Endpoints Tests", async () => {
             expect(bagendLockers.body[0].location.site).equal('Shire');
             expect(bagendLockers.body[0].location.name).equal('Bag-End');
 
-            const nowhereLockers: any = await request(app)
+            const nowhereLockers = await request(app)
                 .get('/lockers?site=neptune&name=nebulae')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
@@ -91,13 +107,13 @@ describe("Locker REST Resource Endpoints Tests", async () => {
 
         describe("/lockers/:id endpoint test", () => {
             it("PUT /lockers/:id Should update lockers properties correctly", async () => {
-                const bagendLocker: any = await request(app)
+                const bagendLocker = await request(app)
                     .get('/lockers?name=Bag-End')
                     .set("Content-Type", "application/json; charset=utf-8")
                     .set("Accept", "application/json; charset=utf-8")
                     .expect("Content-Type", "application/json; charset=utf-8")
 
-                const updatedBagendLocker: any = await request(app)
+                const updatedBagendLocker = await request(app)
                     .put('/lockers/' + bagendLocker.body[0].lockerId)
                     .set("Content-Type", "application/json; charset=utf-8")
                     .set("Accept", "application/json; charset=utf-8")
@@ -122,7 +138,7 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 
                 expect(mordorMove.status).equal(200);
                 
-                const movedToMorderLocker: any = await request(app)
+                const movedToMorderLocker = await request(app)
                     .get('/lockers/' + mordorMove.body.lockerId)
                     .set("Content-Type", "application/json; charset=utf-8")
                     .set("Accept", "application/json; charset=utf-8")
@@ -133,7 +149,17 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 expect(movedToMorderLocker.body.lock).equal(true);
                 expect(movedToMorderLocker.body.verticalPosition).equal("Hidden");
             });
-            // to do add delete and get
+
+            it("DELETE /lockers/:id, Should delete the locker if id is valid and no contract is attached, nothing if not", async () => {
+                const deleteResponse = await request(app)
+                    .delete('/lockers/' + toDeleteLockerId)
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8");
+                
+                expect(deleteResponse.status).equal(200);
+                expect(deleteResponse.body.message).equal("Locker successfully removed");
+            });
         });
     });
 });
