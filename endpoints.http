@@ -37,7 +37,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "number": 15, 
+    "number": 16, 
     "verticalPosition": "En bas",
     "lock": false,
     "locationId": 1

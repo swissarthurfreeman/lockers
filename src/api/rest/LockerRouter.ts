@@ -1,15 +1,16 @@
 import Router from "express";
 import { Locker } from "../../domain/model/Locker";
 import { LockerService } from "../../domain/service/LockerService";
+import { Location } from "../../domain/model/Location";
 
 const LockerRouter = Router();
 
 LockerRouter.get('/', async (req, res) => {
-    res.send(await Locker.findAll());
+    res.send(await Locker.findAll({ include: Location }));
 });
 
 LockerRouter.get('/:id', async (req, res) => {
-    const locker = await Locker.findByPk(req.params.id);    
+    const locker = await Locker.findByPk(req.params.id, { include: Location });    
     if(locker == null) 
         res.status(404);
     res.send(locker);
