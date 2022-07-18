@@ -49,6 +49,17 @@ describe("Location REST Resource Endpoints Tests", () => {
                 });
             expect(otherSciencesLocation.statusCode).equal(201);
             sciencesLoc2 = otherSciencesLocation.body.locationId;
+
+            const mordorRes = await request(app)
+                .post('/locations')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
+                .send({
+                    "site": "Mordor",
+                    "name": "TowerOfFire"
+                });
+            expect(mordorRes.statusCode).equal(201);
         });
 
         it("POST duplicate /locations, should yield an error", async () => {
@@ -73,7 +84,7 @@ describe("Location REST Resource Endpoints Tests", () => {
                 .expect("Content-Type", "application/json; charset=utf-8")
 
             expect(res.statusCode).equal(200);
-            expect(res.body.length).equal(3);
+            expect(res.body.length).equal(4);
 
             const sciII = (res.body as Array<any>).find(o => o.name == 'Sciences-II');
             

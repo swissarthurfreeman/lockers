@@ -88,5 +88,52 @@ describe("Locker REST Resource Endpoints Tests", async () => {
             
             expect(nowhereLockers.status).equal(404);
         });
+
+        describe("/lockers/:id endpoint test", () => {
+            it("PUT /lockers/:id Should update lockers properties correctly", async () => {
+                const bagendLocker: any = await request(app)
+                    .get('/lockers?name=Bag-End')
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8")
+
+                const updatedBagendLocker: any = await request(app)
+                    .put('/lockers/' + bagendLocker.body[0].lockerId)
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8")
+                    .send({
+                        lock: true,                 // bilbo got weary and decided to put his locker out of reach
+                        verticalPosition: "Hidden" 
+                    });
+
+                expect(updatedBagendLocker.status).equal(200);
+                expect(updatedBagendLocker.body.verticalPosition).equal("Hidden");
+                expect(updatedBagendLocker.body.lock).equal(true);
+
+                const mordorMove: any = await request(app)
+                    .put('/lockers/' + bagendLocker.body[0].lockerId)
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8")
+                    .send({
+                        locationId: 4                 // bilbo got very weary and decided to move his locker to mordor 
+                    });
+                
+                expect(mordorMove.status).equal(200);
+                
+                const movedToMorderLocker: any = await request(app)
+                    .get('/lockers/' + mordorMove.body.lockerId)
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8");
+                
+                expect(movedToMorderLocker.status).equal(200);
+                expect(movedToMorderLocker.body.location.name).equal("TowerOfFire");
+                expect(movedToMorderLocker.body.lock).equal(true);
+                expect(movedToMorderLocker.body.verticalPosition).equal("Hidden");
+            });
+            // to do add delete and get
+        });
     });
 });

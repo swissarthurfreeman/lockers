@@ -17,7 +17,7 @@ The backend exposes a REST API to be queried by the front-end. All endpoints are
 | /lockers/:id          | GET, PUT, DELETE               | no                |
 | /contracts            | GET, POST                      | yes               |
 | /contracts/:id        | GET, PUT, DELETE               | no                |
-| /locations            | GET, POST                      | no                |
+| /locations            | GET, POST                      | yes               |
 | /locations/:id        | GET, PUT, DELETE               | no                |
 
 ### Return Objects
