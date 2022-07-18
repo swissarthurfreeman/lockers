@@ -12,8 +12,9 @@ class Contract extends Model {
     @PrimaryKey
     @ForeignKey(() => Locker)
     @AllowNull(false)
+    @Unique
     @Column(DataType.UUID)
-    lockerId: string;
+    lockerId: string;   // a locker can have only one contract
 
     @AllowNull(false)
     @Column
@@ -24,8 +25,7 @@ class Contract extends Model {
     lastname: string;
 
     @AllowNull(false)
-    @Unique
-    @IsEmail
+    @IsEmail    // a user can have multiple contracts
     @Column
     email: string;
 

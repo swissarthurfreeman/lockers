@@ -105,6 +105,7 @@ describe("Locker REST Resource Endpoints Tests", async () => {
             expect(nowhereLockers.status).equal(404);
         });
 
+        let bilbosLockerId: number;
         describe("/lockers/:id endpoint test", () => {
             it("PUT /lockers/:id Should update lockers properties correctly", async () => {
                 const bagendLocker = await request(app)
@@ -138,16 +139,18 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 
                 expect(mordorMove.status).equal(200);
                 
-                const movedToMorderLocker = await request(app)
+                const movedToMordorLocker = await request(app)
                     .get('/lockers/' + mordorMove.body.lockerId)
                     .set("Content-Type", "application/json; charset=utf-8")
                     .set("Accept", "application/json; charset=utf-8")
                     .expect("Content-Type", "application/json; charset=utf-8");
                 
-                expect(movedToMorderLocker.status).equal(200);
-                expect(movedToMorderLocker.body.location.name).equal("TowerOfFire");
-                expect(movedToMorderLocker.body.lock).equal(true);
-                expect(movedToMorderLocker.body.verticalPosition).equal("Hidden");
+                expect(movedToMordorLocker.status).equal(200);
+                expect(movedToMordorLocker.body.location.name).equal("TowerOfFire");
+                expect(movedToMordorLocker.body.lock).equal(true);
+                expect(movedToMordorLocker.body.verticalPosition).equal("Hidden");
+
+                bilbosLockerId = movedToMordorLocker.body.lockerId;
             });
 
             it("DELETE /lockers/:id, Should delete the locker if id is valid and no contract is attached, nothing if not", async () => {
@@ -159,6 +162,32 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 
                 expect(deleteResponse.status).equal(200);
                 expect(deleteResponse.body.message).equal("Locker successfully removed");
+
+                await request(app)
+                    .post('/contracts')
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8")
+                    .send({
+                        "lockerId": bilbosLockerId
+                    });
+
+                const bilboDeleteResponse = await request(app)
+                    .delete('/lockers/' + bilbosLockerId)
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8");
+                
+                expect(bilboDeleteResponse.status).equal(400);
+
+                const randomDelete = await request(app)
+                    .delete('/lockers/sakksdjgksdg')
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8");
+                
+                expect(randomDelete.status).equal(400);
+                expect(randomDelete.body.message).equal("Locker does not exist");
             });
         });
     });

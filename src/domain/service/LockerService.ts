@@ -38,13 +38,13 @@ abstract class LockerService {
             } else {
                 const contract = await Contract.findByPk(lockerId);
                 if(contract == null) {
-                    await lockerToDestroy.destroy();
+                    return await lockerToDestroy.destroy();
                 } else {
                     throw new Error("Locker has a contract attached, delete the contract first");
                 }
             }
         });
-    };
+    }
 }
 
 export { LockerService };

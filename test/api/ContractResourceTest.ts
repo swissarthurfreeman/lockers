@@ -3,7 +3,7 @@ import { describe, it } from "mocha";
 import request from "supertest";
 import { app } from "../../src";
 
-describe("Contract Service Tests", () => {
+describe("Contract Resource Tests", () => {
     describe("Contract Endpoint user Creates Contract use-case", async () => {
         
         it("Should Post a valid Contract", async () => {
@@ -14,6 +14,7 @@ describe("Contract Service Tests", () => {
                 .expect("Content-Type", "application/json; charset=utf-8")
             
             const locker = lockerRes.body[0];
+            console.log(locker);
 
             const contractRes = await request(app)
                 .post('/contracts')
@@ -24,6 +25,7 @@ describe("Contract Service Tests", () => {
                     "lockerId": locker.lockerId
                 });
             
+            console.log(contractRes.body);
             expect(contractRes.statusCode).equal(201);
             expect(contractRes.body.status).equal("Occupied");
         });
