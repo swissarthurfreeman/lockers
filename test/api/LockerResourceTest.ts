@@ -62,15 +62,16 @@ describe("Locker REST Resource Endpoints Tests", async () => {
         });
 
         it("GET /lockers?site=SITE&name=NAME, should return all lockers at site", async () => {
-            console.log("Bouh");
+            console.log("GET /lockers?site=SITE&name=NAME, should return all lockers at site");
             const sciencesIIILockers: any = await request(app)
                 .get('/lockers?site=Sciences&name=Sciences-III')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
 
-            expect(sciencesIIILockers[0].body.location.site).equal('Sciences');
-            expect(sciencesIIILockers[0].body.location.name).equal('Sciences-III');
+            console.log(sciencesIIILockers.body);
+            expect(sciencesIIILockers.body[0].location.site).equal('Sciences');
+            expect(sciencesIIILockers.body[0].location.name).equal('Sciences-III');
 
             const bagendLockers: any = await request(app)
                 .get('/lockers?site=Shire&name=Bag-End')
@@ -78,8 +79,8 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
             
-            expect(bagendLockers[0].body.location.site).equal('Shire');
-            expect(bagendLockers[0].body.location.name).equal('Bag-End');
+            expect(bagendLockers.body[0].location.site).equal('Shire');
+            expect(bagendLockers.body[0].location.name).equal('Bag-End');
 
             const nowhereLockers: any = await request(app)
                 .get('/lockers?site=neptune&name=nebulae')
@@ -87,7 +88,7 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
             
-            expect(nowhereLockers.body.length).equal(0);
+            expect(nowhereLockers.status).equal(404);
         });
     });
 });

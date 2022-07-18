@@ -6,7 +6,18 @@ import { Location } from "../../domain/model/Location";
 const LockerRouter = Router();
 
 LockerRouter.get('/', async (req, res) => {
-    res.send(await Locker.findAll({ where: req.query, include: Location }));
+    const location = await Location.findOne({where: req.query});
+    if(location == null) {
+        res.status(404).send({message: "Specified Location does not exist"});
+    } else {
+        const lockers: Locker[] = await Locker.findAll({ 
+            include: [{
+                model: Location,
+                where: req.query,
+            }] 
+        });
+        res.send(lockers);
+    }
 });
 
 LockerRouter.get('/:id', async (req, res) => {
