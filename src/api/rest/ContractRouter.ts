@@ -12,33 +12,27 @@ ContractRouter.get('/', async (req, res) => {
 
 ContractRouter.get('/:id', async (req, res) => {
     const contract = await Contract.findByPk(req.params.id, { include: Locker });
-    console.log(contract)
-    console.log(contract.status)
     if(contract == null)
         res.status(404);
     res.send(contract);
 });
 
+// todo : check id is uuid.
 ContractRouter.post('/', async (req, res) => {
-    const locker = await Locker.findByPk(req.body.lockerId);    
-    if(locker == null) {
-        res.status(400).send({message: "Locker does not exist"});
-    } else {
-        // case where user creates a contract for himself
-        ContractService.create(
-            Contract.build({
-                lockerId: locker.lockerId,
-                firstname: req.body.user.firstname,
-                lastname: req.body.user.lastname,
-                email: req.body.user.email,
-                expiration: ContractService.getExpirationDate()
-            })
-        ).then((contract: Contract) => {
-            res.status(201).send(contract);
-        }).catch((err) => {        
-            res.status(400).send({message: err.message});
-        });
-    }
+    // case where user creates a contract for himself
+    ContractService.create(
+        Contract.build({
+            lockerId: req.body.lockerId,
+            firstname: req.body.user.firstname,
+            lastname: req.body.user.lastname,
+            email: req.body.user.email,
+            expiration: ContractService.getExpirationDate()
+        })
+    ).then((contract: Contract) => {
+        res.status(201).send(contract);
+    }).catch((err) => {        
+        res.status(400).send({message: err.message});
+    });
 });
 
 ContractRouter.put('/:id', async (req, res) => {
