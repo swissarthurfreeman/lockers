@@ -22,7 +22,7 @@ ContractRouter.get('/:id', async (req, res) => {
 ContractRouter.post('/', async (req, res) => {
     const locker = await Locker.findByPk(req.body.lockerId);    
     if(locker == null) {
-        res.status(400).send("Locker does not exist");
+        res.status(400).send({message: "Locker does not exist"});
     } else {
         // case where user creates a contract for himself
         ContractService.create(
@@ -35,8 +35,8 @@ ContractRouter.post('/', async (req, res) => {
             })
         ).then((contract: Contract) => {
             res.status(201).send(contract);
-        }).catch((err) => {
-            res.status(400).send(err.message);
+        }).catch((err) => {        
+            res.status(400).send({message: err.message});
         });
     }
 });

@@ -36,7 +36,7 @@ describe("Contract Service Tests", () => {
         });
 
         const expirationYear: string = oldContract.expiration.getFullYear().toString();
-
+        
         it("Should return Occupied Status", () => {
             expect(ContractService.status(validContract)).equal("Occupied");
             expect(ContractService.status(oldContract, new Date(expirationYear+'-01-05'))).equal("Occupied");

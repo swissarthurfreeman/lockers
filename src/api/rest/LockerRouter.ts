@@ -21,7 +21,7 @@ LockerRouter.post('/', async (req, res) => {
             res.status(201).send(locker);
         })
         .catch((err) => {
-            res.status(400).send(err.message);
+            res.status(400).send({message: err.message});
         });
 });
 
