@@ -8,7 +8,7 @@
     "postbuild": "./node_modules/.bin/eslint ./dist/**/*.js",
     "prestart": "npm run build",
     "start": "ts-node-dev src/index.ts",
-    "test": "mocha -r ts-node/register test/order.ts"
+    "test": "mocha --timeout 0 -r ts-node/register test/order.ts"
   },
   "repository": {
     "type": "git",

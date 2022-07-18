@@ -1,10 +1,9 @@
 import { expect } from "chai";
 import request from "supertest";
 import { describe, it } from "mocha";
-import { main, app } from "../../src/index";
+import { app } from "../../src/index";
 
 describe("Locker REST Resource Endpoints Tests", async () => {
-
     describe("/lockers endpoint test", () => {
         it("POST /lockers, Should POST a locker", async () => {
             const locationRes = await request(app)  // db is conserved sequentially
@@ -62,16 +61,33 @@ describe("Locker REST Resource Endpoints Tests", async () => {
             expect(lockers.body.length).equal(2);
         });
 
-        it("GET /lockers?site=Sciences, should return all lockers at site", async () => {
+        it("GET /lockers?site=SITE&name=NAME, should return all lockers at site", async () => {
             console.log("Bouh");
-        });
+            const sciencesIIILockers: any = await request(app)
+                .get('/lockers?site=Sciences&name=Sciences-III')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
 
-        it("GET /lockers?site=Sciences&status=Occupied, should return all lockers at site", async () => {
-            console.log("Bouh");
-        });
+            expect(sciencesIIILockers[0].body.location.site).equal('Sciences');
+            expect(sciencesIIILockers[0].body.location.name).equal('Sciences-III');
 
-        it("GET /lockers?site=Sciences&name=&status=Occupied, should return all lockers at site", async () => {
-            console.log("Bouh");
+            const bagendLockers: any = await request(app)
+                .get('/lockers?site=Shire&name=Bag-End')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
+            
+            expect(bagendLockers[0].body.location.site).equal('Shire');
+            expect(bagendLockers[0].body.location.name).equal('Bag-End');
+
+            const nowhereLockers: any = await request(app)
+                .get('/lockers?site=neptune&name=nebulae')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
+            
+            expect(nowhereLockers.body.length).equal(0);
         });
     });
 });

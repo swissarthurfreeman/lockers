@@ -6,7 +6,7 @@ import { Location } from "../../domain/model/Location";
 const LockerRouter = Router();
 
 LockerRouter.get('/', async (req, res) => {
-    res.send(await Locker.findAll({ include: Location }));
+    res.send(await Locker.findAll({ where: req.query, include: Location }));
 });
 
 LockerRouter.get('/:id', async (req, res) => {
