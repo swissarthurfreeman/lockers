@@ -36,16 +36,23 @@ ContractRouter.post('/', async (req, res) => {
 });
 
 ContractRouter.put('/:id', async (req, res) => {
-    const lockerToUpdate = await Contract.findByPk(req.params.id);    // TODO : add error management, wrap in transaction
-    lockerToUpdate.set(req.body);
-    const updatedLocker = await lockerToUpdate.save();      // TODO : add error management
-    res.send(updatedLocker);
+    ContractService.update(req.params.id, req.body)
+        .then((updatedContract) => {
+            res.status(200).send(updatedContract);
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        });
 });
 
 ContractRouter.delete('/:id', async (req, res) => {
-    const lockerToDestroy = await Contract.findByPk(req.params.id);
-    await lockerToDestroy.destroy();
-    res.status(204).send();
+    ContractService.delete(req.params.id)
+        .then(() => {
+            res.status(204).send();
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        });
 });
 
 export { ContractRouter };

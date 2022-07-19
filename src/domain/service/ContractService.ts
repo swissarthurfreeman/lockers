@@ -4,15 +4,41 @@ import { sequelize } from "./../../index";
 import { config } from "../../../Config";
 
 abstract class ContractService {
-    public static async create(contract: Contract) {
+
+    public static async update(contractLockerId: string, to: any): Promise<Contract> {
+        return sequelize.transaction( async (t) => {
+            const contract = await Contract.findByPk(contractLockerId);
+            if(contract == null) {
+                throw new Error("Specified Contract does not exist.");   
+            } else {
+                contract.set(to);
+                const updatedContract = await contract.save({transaction: t});
+                return updatedContract;
+            }
+        });
+    }
+
+    public static async create(contract: Contract): Promise<Contract> {
         // returns last return value of nested callback, if rejected throws an error.
         return await sequelize.transaction(async (t) => {
             console.log(contract.lockerId);
-            const locker = await Locker.findByPk(contract.lockerId);
+            const locker = await Locker.findByPk(contract.lockerId, {transaction:t});
             if(locker == null) {
                 throw new Error("Locker does not exist");
             } else {
                 return await contract.save({transaction: t});
+            }
+        });
+    }
+
+    public static async delete(contractLockerId: string): Promise<void> {
+        return sequelize.transaction( async (t) => {
+            const lockerToDestroy = await Contract.findByPk(contractLockerId);
+            if(lockerToDestroy == null) {
+                return;
+            } else {
+                lockerToDestroy.destroy({transaction: t});
+                return;
             }
         });
     }
