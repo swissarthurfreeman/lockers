@@ -15,7 +15,7 @@ const sequelize = new Sequelize({
     password: config.sqlConfig.password,
     username: config.sqlConfig.user,
     database: config.sqlConfig.database,
-    port: 3306,
+    port: config.sqlConfig.port,
     models: [Contract, Location, Locker],
     logging: false
 });

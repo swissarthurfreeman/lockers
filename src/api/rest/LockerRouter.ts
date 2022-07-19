@@ -2,15 +2,15 @@ import Router from "express";
 import { Locker } from "../../domain/model/Locker";
 import { LockerService } from "../../domain/service/LockerService";
 import { Location } from "../../domain/model/Location";
+import { Contract } from "../../domain/model/Contract";
+import { Op } from "sequelize";
 
 const LockerRouter = Router();
 
 /**
- * Gets list of all lockers with filtering via location. 
- * TODO : Add filtering based on wether free or not.
- * TODO : move to locker service
+ * Gets list of all free lockers with filtering via location. 
  */
-LockerRouter.get('/', (req, res) => {
+LockerRouter.get('/', async (req, res) => {
     // if a location is specified, it must exist, else returns all locations
     Location.findOne({where: req.query})
         .then(async (location: Location) => {
@@ -21,7 +21,13 @@ LockerRouter.get('/', (req, res) => {
                     res.status(404).send({message: "Specified Location does not exist"});
                 }
             } else {
-                const lockers: Locker[] = await Locker.findAll({ 
+                const contracts: Contract[] = await Contract.findAll();
+                const lockersWithContractsIds: string[] = contracts.map(contr => contr.lockerId);
+                
+                const lockers: Locker[] = await Locker.findAll({
+                    where: {
+                        lockerId: { [Op.notIn]: lockersWithContractsIds}
+                    },
                     include: [{
                         model: Location,
                         where: req.query,
@@ -32,7 +38,7 @@ LockerRouter.get('/', (req, res) => {
         })
         .catch((err) => {
             res.status(400).send({ message: err.message });
-        });    
+        });
 });
 
 LockerRouter.get('/:id', (req, res) => {

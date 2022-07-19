@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import request from "supertest";
 import { describe, it } from "mocha";
+import request from "supertest";
 import { app } from "../../src/index";
 
 describe("Locker REST Resource Endpoints Tests", async () => {

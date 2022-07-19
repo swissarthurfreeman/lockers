@@ -7,7 +7,7 @@ const config = {
         contractRenewalDeadline: '-06-30',
         port: process.env.NODE_PORT,
         sqlConfig: {
-            port: process.env.MYSQL_DEVELOPMENT_PORT,
+            port: parseInt(process.env.MYSQL_DEVELOPMENT_PORT),
             database: process.env.MYSQL_DEVELOPMENT_DATABASE,   
             host: process.env.MYSQL_HOST,
             user: process.env.MYSQL_USER,

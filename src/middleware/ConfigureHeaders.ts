@@ -6,7 +6,7 @@ const ConfigureHeadersMiddleware = (req: any, res: any, next: any) => {
             group: ["user"],
             firstname: "John",
             lastname: "Doe",
-            email: "john.doe@joe.com"
+            email: "john@doe.ts"
         }
         req.body.user.group.push('admin');
     } else if(config.id == 'production') {
