@@ -17,7 +17,7 @@ abstract class LockerService {
         });
     }
     
-    public static async update(lockerId: string, to: any) {
+    public static async update(lockerId: string, to: any): Promise<Locker> {
         return await sequelize.transaction(async (t) => {
             const lockerToUpdate = await Locker.findByPk(lockerId);
             if(lockerToUpdate == null) {

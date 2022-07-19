@@ -149,12 +149,12 @@ describe("Location REST Resource Endpoints Tests", () => {
         });
 
         it("DELETE /locations/:id, should delete location", async function() {
-            const dupUpdate = await request(app)
+            const delRes = await request(app)
                 .delete('/locations/'+sciencesLoc2)
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
                 
-            expect(dupUpdate.status).equal(204);
+            expect(delRes.status).equal(204);
             
             const locationsAtSciences = await request(app)
                 .get('/locations?site=Sciences')

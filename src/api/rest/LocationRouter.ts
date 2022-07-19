@@ -4,31 +4,43 @@ import { Location } from "../../domain/model/Location";
 
 const LocationRouter = Router();
 
-LocationRouter.get('/', async (req, res) => {
+LocationRouter.get('/', (req, res) => {
     // TODO : validate query ?
-    res.send(await Location.findAll({where: req.query}));
+    Location.findAll({where: req.query})
+        .then((lockers: Location[]) => {
+            res.status(200).send(lockers);
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        })
 });
 
-LocationRouter.get('/:id', async (req, res) => {
-    res.send(await Location.findByPk(req.params.id));
+LocationRouter.get('/:id', (req, res) => {
+    Location.findByPk(req.params.id)
+        .then((location: Location) => {
+            if(location == null) {
+                res.status(404).send({message: "Specified Location does not exist"});
+            } else {
+                res.status(200).send(location);
+            }
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        });
 });
 
-LocationRouter.put('/:id', async (req, res) => {
-    const loc = await Location.findByPk(req.params.id);
-    if(loc == null) {
-        res.status(404).send({message: "Location does not exist"});
-    } else {
-        loc.update(req.body)
-            .then((loc: Location) => {
-                res.status(200).send(loc);
-            })
-            .catch((err) => {
-                res.status(400).send({message: err.message});
-            });
-    }
+// TODO : move to service and promisify/transaxify
+LocationRouter.put('/:id', (req, res) => {
+    LocationService.update(req.params.id, req.body)
+        .then((location) => {
+            res.status(200).send(location);
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        });
 });
 
-LocationRouter.post('/', async (req, res) => {
+LocationRouter.post('/', (req, res) => {
     LocationService.create(Location.build(req.body))
         .then((location: Location) => {
             res.status(201).send(location);
@@ -37,14 +49,13 @@ LocationRouter.post('/', async (req, res) => {
         });
 });
 
-// TODO : make sure no lockers at present at location.
-LocationRouter.delete('/:id', async (req, res) => {
+LocationRouter.delete('/:id', (req, res) => {
     Location.destroy({where: {locationId: req.params.id}})
         .then(() => {
             res.status(204).send();
         })
         .catch((err) => {
-            res.status(500).send({message: "Resource deletion error"});
+            res.status(500).send({message: err.message});
         });
 });
 

@@ -6,7 +6,8 @@ import { Location } from "../../domain/model/Location";
 const LockerRouter = Router();
 
 LockerRouter.get('/', async (req, res) => {
-    const location = await Location.findOne({where: req.query});
+    // if a location is specified, it must exist, else returns all locations
+    const location = await Location.findOne({where: req.query});    
     if(location == null) {
         res.status(404).send({message: "Specified Location does not exist"});
     } else {

@@ -47,7 +47,7 @@ Accept: application/json
 @lockerId = {{lockerPost.response.body.$.lockerId}}
 
 ###
-GET {{host}}/lockers?site=Sciences&name=EPA
+GET {{host}}/lockers?site=Sciences
 Content-Type: application/json
 Accept: application/json
 
