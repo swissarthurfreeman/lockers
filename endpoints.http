@@ -40,14 +40,14 @@ Accept: application/json
     "number": 16, 
     "verticalPosition": "En bas",
     "lock": false,
-    "locationId": 5
+    "locationId":1
 }
 
 ###
 @lockerId = {{lockerPost.response.body.$.lockerId}}
 
 ###
-GET {{host}}/lockers?site=Sciences
+GET {{host}}/lockers
 Content-Type: application/json
 Accept: application/json
 
@@ -71,7 +71,21 @@ Content-Type: application/json
 Accept: application/json
 
 ###
-GET {{host}}/contracts/337f6867-7fd1-44bb-8dfe-74eb71baf731
+GET {{host}}/contracts/{{lockerId}}
 Content-Type: application/json
 Accept: application/json
 
+###
+DELETE {{host}}/contracts/{{lockerId}}
+Content-Type: application/json
+Accept: application/json
+
+###
+DELETE {{host}}/lockers/{{lockerId}}
+Content-Type: application/json
+Accept: application/json
+
+###
+GET {{host}}/lockers
+Content-Type: application/json
+Accept: application/json

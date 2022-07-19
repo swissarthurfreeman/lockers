@@ -13,10 +13,7 @@ ContractRouter.get('/', async (req, res) => {
                     model: Locker,
                     include: [{
                         model: Location,
-                        where: {
-                            site: req.query.site || null,
-                            name: req.query.name || null
-                        }
+                        where: req.query
                     }]
                 }]
         })

@@ -146,6 +146,7 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                     .expect("Content-Type", "application/json; charset=utf-8");
                 
                 expect(movedToMordorLocker.status).equal(200);
+                expect(movedToMordorLocker.body.location.site).equal("Mordor");
                 expect(movedToMordorLocker.body.location.name).equal("TowerOfFire");
                 expect(movedToMordorLocker.body.lock).equal(true);
                 expect(movedToMordorLocker.body.verticalPosition).equal("Hidden");
@@ -172,7 +173,7 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                         "lockerId": bilbosLockerId
                     });
 
-                const bilboDeleteResponse = await request(app)
+                const bilboDeleteResponse = await request(app)  // cannot delete a locker with a contract attached
                     .delete('/lockers/' + bilbosLockerId)
                     .set("Content-Type", "application/json; charset=utf-8")
                     .set("Accept", "application/json; charset=utf-8")
@@ -180,6 +181,16 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                 
                 expect(bilboDeleteResponse.status).equal(400);
 
+                const bilbosLockerStillExistsRes = await request(app)
+                    .get('/lockers/' + bilbosLockerId)
+                    .set("Content-Type", "application/json; charset=utf-8")
+                    .set("Accept", "application/json; charset=utf-8")
+                    .expect("Content-Type", "application/json; charset=utf-8");
+
+                expect(bilbosLockerStillExistsRes.body.location.name).equal("TowerOfFire");
+            });
+
+            it("DELETE /lockers/sakksdjgksdg should tell you locker doesn't exist", async () => {
                 const randomDelete = await request(app)
                     .delete('/lockers/sakksdjgksdg')
                     .set("Content-Type", "application/json; charset=utf-8")

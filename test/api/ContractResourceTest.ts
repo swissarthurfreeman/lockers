@@ -29,6 +29,33 @@ describe("Contract Resource Tests", () => {
             lockerId = locker.lockerId;
         });
 
+        it("Should post Bilbo's Shire valid contract", async () => {
+            const shireLockerRes = await request(app)
+                .post('/lockers')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
+                .send({
+                    number: 10,
+                    verticalPosition: "En bas",
+                    lock: false,
+                    locationId: 2   // the shire
+                })
+
+            expect(shireLockerRes.body.number).equal(10);
+
+            const bilbosMordorContractRes = await request(app)
+                .post('/contracts')
+                .set("Content-Type", "application/json; charset=utf-8")
+                .set("Accept", "application/json; charset=utf-8")
+                .expect("Content-Type", "application/json; charset=utf-8")
+                .send({
+                    "lockerId": shireLockerRes.body.lockerId
+                });
+
+            expect(bilbosMordorContractRes.body.status).equal("Occupied");
+        });
+
         it("Should not create two contracts at a same locker", async () => {
             const contractRes = await request(app)
                 .post('/contracts')
@@ -39,7 +66,6 @@ describe("Contract Resource Tests", () => {
                     "lockerId": lockerId
                 });
             
-            console.log(contractRes.body.message); // TODO : check validation error and display more information
             expect(contractRes.statusCode).equal(400);
         });
 

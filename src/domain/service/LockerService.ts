@@ -7,7 +7,7 @@ abstract class LockerService {
     public static async create(locker: Locker): Promise<Locker> {
         // returns last return value of nested callback.
         return sequelize.transaction(async (t) => {
-            const location = await Location.findByPk(locker.locationId);
+            const location = await Location.findByPk(locker.locationId, {transaction: t});
             if(location == null) {
                 throw new Error("Specified Location does not exist");
             } else { 
@@ -16,9 +16,9 @@ abstract class LockerService {
         });
     }
     
-    public static async update(lockerId: string, to: any): Promise<Locker> {
+    public static async update(lockerId: string, to: object): Promise<Locker> {
         return sequelize.transaction(async (t) => {
-            const lockerToUpdate = await Locker.findByPk(lockerId);
+            const lockerToUpdate = await Locker.findByPk(lockerId, {transaction: t});
             if(lockerToUpdate == null) {
                 throw new Error("Specified Locker does not exist");
             } else {
@@ -30,13 +30,13 @@ abstract class LockerService {
 
     public static async destroy(lockerId: string): Promise<void> {
         return sequelize.transaction(async (t) => {
-            const lockerToDestroy = await Locker.findByPk(lockerId);
+            const lockerToDestroy = await Locker.findByPk(lockerId, {transaction: t});
             if(lockerToDestroy == null) {
                 throw new Error("Locker does not exist");
             } else {
                 const contract = await Contract.findByPk(lockerId);
                 if(contract == null) {
-                    return lockerToDestroy.destroy();
+                    return lockerToDestroy.destroy({transaction: t});
                 } else {
                     throw new Error("Locker has a contract attached, delete the contract first");
                 }

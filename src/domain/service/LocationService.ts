@@ -4,19 +4,18 @@ import { Locker } from "../model/Locker";
 
 abstract class LocationService {
     public static async create(location: Location): Promise<Location> {
-        return sequelize.transaction(async (t) => {
-            const createdLocation = await location.save({transaction: t});
-            return createdLocation;
+        return sequelize.transaction((t) => {
+            return location.save({transaction: t});
         });
     }
 
-    public static async update(locationId: string, to: any): Promise<Location> {
+    public static async update(locationId: string, to: object): Promise<Location> {
         return sequelize.transaction(async (t) => {
             const loc = await Location.findByPk(locationId, {transaction: t});
             if(loc == null) {
                 throw new Error("Specified Location does not exist");
             } else { 
-                return loc.update(to);
+                return loc.update(to, {transaction: t});
             }
         });
     }

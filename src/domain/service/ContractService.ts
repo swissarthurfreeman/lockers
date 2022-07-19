@@ -5,9 +5,9 @@ import { config } from "../../../Config";
 
 abstract class ContractService {
 
-    public static async update(contractLockerId: string, to: any): Promise<Contract> {
+    public static async update(contractLockerId: string, to: object): Promise<Contract> {
         return sequelize.transaction( async (t) => {
-            const contract = await Contract.findByPk(contractLockerId);
+            const contract = await Contract.findByPk(contractLockerId, {transaction: t});
             if(contract == null) {
                 throw new Error("Specified Contract does not exist.");   
             } else {
@@ -31,11 +31,11 @@ abstract class ContractService {
 
     public static async delete(contractLockerId: string): Promise<void> {
         return sequelize.transaction( async (t) => {
-            const lockerToDestroy = await Contract.findByPk(contractLockerId);
-            if(lockerToDestroy == null) {
+            const contractToDestroy = await Contract.findByPk(contractLockerId, {transaction: t});
+            if(contractToDestroy == null) {
                 return;
             } else {
-                return lockerToDestroy.destroy({transaction: t});
+                return contractToDestroy.destroy({transaction: t});
             }
         });
     }
