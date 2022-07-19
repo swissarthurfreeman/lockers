@@ -1,12 +1,13 @@
 import { config } from "../../Config";
 
 const ConfigureHeadersMiddleware = (req: any, res: any, next: any) => {
+    console.log(req.headers);
     if(config.id == 'test') {
         req.body.user = {
-            group: ["user"],
-            firstname: "John",
-            lastname: "Doe",
-            email: "john@doe.ts"
+            group: req.headers.oidc_group || ["user"],
+            firstname: req.headers.oidc_name || "John",
+            lastname: req.headers.oidc_family_name || "Doe",
+            email: req.headers.oidc_email || "john@doe.ts"
         }
         req.body.user.group.push('admin');
     } else if(config.id == 'production') {

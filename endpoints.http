@@ -36,7 +36,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "number": 16, 
+    "number": 26, 
     "verticalPosition": "En bas",
     "lock": false,
     "locationId":1
@@ -59,6 +59,9 @@ Accept: application/json
 POST {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
+oidc_name: Bilbo
+oidc_family_name: Baggins
+oidc_email: bilbo@gmail.com
 
 {
     "lockerId": "{{lockerId}}"
@@ -68,6 +71,15 @@ Accept: application/json
 GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
+
+###
+POST {{host}}/contracts
+Content-Type: application/json
+Accept: application/json
+
+{
+    "lockerId": "{{lockerId}}"
+}
 
 ###
 GET {{host}}/contracts/{{lockerId}}
