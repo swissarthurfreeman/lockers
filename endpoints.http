@@ -71,7 +71,7 @@ Content-Type: application/json
 Accept: application/json
 
 ###
-GET {{host}}/contracts/{{lockerId}}
+GET {{host}}/contracts/337f6867-7fd1-44bb-8dfe-74eb71baf731
 Content-Type: application/json
 Accept: application/json
 

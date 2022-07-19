@@ -20,13 +20,12 @@ abstract class ContractService {
 
     public static async create(contract: Contract): Promise<Contract> {
         // returns last return value of nested callback, if rejected throws an error.
-        return await sequelize.transaction(async (t) => {
-            console.log(contract.lockerId);
+        return sequelize.transaction(async (t) => {
             const locker = await Locker.findByPk(contract.lockerId, {transaction:t});
             if(locker == null) {
                 throw new Error("Locker does not exist");
             } else {
-                return await contract.save({transaction: t});
+                return contract.save({transaction: t});
             }
         });
     }

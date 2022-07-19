@@ -1,13 +1,31 @@
 import Router from "express";
 import { Locker } from "../../domain/model/Locker";
+import { Location } from "../../domain/model/Location";
 import { Contract } from "../../domain/model/Contract";
 import { ContractService } from "../../domain/service/ContractService";
 
 const ContractRouter = Router();
 
 ContractRouter.get('/', async (req, res) => {
-    const contracts = await Contract.findAll();
-    res.send(contracts);
+    Contract.findAll({
+            include: [
+                {
+                    model: Locker,
+                    include: [{
+                        model: Location,
+                        where: {
+                            site: req.query.site || null,
+                            name: req.query.name || null
+                        }
+                    }]
+                }]
+        })
+        .then((contracts: Contract[]) => {
+            res.status(200).send(contracts);
+        })
+        .catch((err) => {
+            res.status(400).send({message: err.message});
+        })
 });
 
 ContractRouter.get('/:id', async (req, res) => {
@@ -18,7 +36,7 @@ ContractRouter.get('/:id', async (req, res) => {
 });
 
 // todo : check id is uuid.
-ContractRouter.post('/', async (req, res) => {
+ContractRouter.post('/', (req, res) => {
     // case where user creates a contract for himself
     ContractService.create(
         Contract.build({
@@ -35,7 +53,7 @@ ContractRouter.post('/', async (req, res) => {
     });
 });
 
-ContractRouter.put('/:id', async (req, res) => {
+ContractRouter.put('/:id', (req, res) => {
     ContractService.update(req.params.id, req.body)
         .then((updatedContract) => {
             res.status(200).send(updatedContract);
@@ -45,7 +63,7 @@ ContractRouter.put('/:id', async (req, res) => {
         });
 });
 
-ContractRouter.delete('/:id', async (req, res) => {
+ContractRouter.delete('/:id', (req, res) => {
     ContractService.delete(req.params.id)
         .then(() => {
             res.status(204).send();
