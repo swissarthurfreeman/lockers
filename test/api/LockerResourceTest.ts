@@ -199,8 +199,6 @@ describe("Locker REST Resource Endpoints Tests", async () => {
                     .set("Accept", "application/json; charset=utf-8")
                     .expect("Content-Type", "application/json; charset=utf-8");
                 
-                console.log(bilboDeleteResponse.body);
-                
                 expect(bilboDeleteResponse.status).equal(400);
                 expect(bilboDeleteResponse.body.message).equal("Locker has a contract attached, delete the contract first");
             });

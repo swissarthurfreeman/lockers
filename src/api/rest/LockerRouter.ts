@@ -15,7 +15,11 @@ LockerRouter.get('/', (req, res) => {
     Location.findOne({where: req.query})
         .then(async (location: Location) => {
             if(location == null) {
-                res.status(404).send({message: "Specified Location does not exist"});
+                if(JSON.stringify(req.query) == "{}") {
+                    res.status(404).send({message: "There are no locations or lockers in the database"});    
+                } else {
+                    res.status(404).send({message: "Specified Location does not exist"});
+                }
             } else {
                 const lockers: Locker[] = await Locker.findAll({ 
                     include: [{

@@ -7,6 +7,7 @@ import { LockerRouter } from "./api/rest/LockerRouter";
 import { LocationRouter } from "./api/rest/LocationRouter";
 import { ContractRouter } from "./api/rest/ContractRouter";
 import { config } from "../Config";
+import { ConfigureHeadersMiddleware } from "./middleware/ConfigureHeaders";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -23,17 +24,7 @@ const app = express();
 const port = 8080;
 
 app.use(express.json());    // tells express to parse bodies as json
-
-app.use('*', (req, res, next) => {
-    req.body.user = {
-        group: "admin",
-        firstname: "John",
-        lastname: "Doe",
-        email: "john.doe@joe.com"
-    }
-    next();
-});
-
+app.use('*', ConfigureHeadersMiddleware);
 app.use('/lockers', LockerRouter);
 app.use('/locations', LocationRouter);
 app.use('/contracts', ContractRouter);
@@ -45,10 +36,6 @@ async function main() {
     app.listen(port, () => {
         console.log(`Server started at http://localhost:${port}`);
     });
-}
-
-if(config.id != 'test') {
-    main();
 }
 
 export { main, app, sequelize };

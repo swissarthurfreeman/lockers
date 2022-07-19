@@ -24,7 +24,6 @@ GET {{host}}/locations?site=Sciences
 Content-Type: application/json
 Accept: application/json
 
-
 ###
 GET {{host}}/locations/{{locationId}}
 Content-Type: application/json
@@ -66,7 +65,7 @@ Accept: application/json
 }
 
 ###
-GET {{host}}/contracts?statuses=NonRenewed
+GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
 
