@@ -66,7 +66,7 @@ Accept: application/json
 }
 
 ###
-GET {{host}}/contracts
+GET {{host}}/contracts?statuses=NonRenewed
 Content-Type: application/json
 Accept: application/json
 

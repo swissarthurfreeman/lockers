@@ -2,15 +2,22 @@ import { expect } from "chai";
 import request from "supertest";
 import { describe, it } from "mocha";
 import { main, app } from "../../src/index";
+import { Locker } from "../../src/domain/model/Locker";
+import { Contract } from "../../src/domain/model/Contract";
+import { Location } from "../../src/domain/model/Location";
 
 describe("Location REST Resource Endpoints Tests", () => {
+    before(async () => {
+        await main();
+        await Contract.destroy({where: {}})
+        await Locker.destroy({where: {}});
+        await Location.destroy({where: {}});
+    });
+
     let sciencesLoc1: number;
     let sciencesLoc2: number;
     describe("/locations endpoint test", async () => {
-        before(async () => {
-            await main();
-        });
-
+        
         it("POST new /locations, should create a new Location", async function() {
             const locationRes = await request(app)
                 .post('/locations')

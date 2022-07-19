@@ -17,7 +17,7 @@
     },
     "include": [
         "src/**/*" // ** means match all files in src's subdirectories recursively
-    ],
+, "test/api/LockerService.ts"    ],
     "exclude": [
         "node_modules",
         "test/**/*.ts"  // tests are executed via ts-node-dev using jit compilation for simplicity. 
