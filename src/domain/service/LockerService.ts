@@ -10,9 +10,8 @@ abstract class LockerService {
             const location = await Location.findByPk(locker.locationId);
             if(location == null) {
                 throw new Error("Specified Location does not exist");
-            } else {
-                const createdLocker = await locker.save({transaction: t});
-                return createdLocker;
+            } else { 
+                return locker.save({transaction: t});
             }
         });
     }
@@ -24,8 +23,7 @@ abstract class LockerService {
                 throw new Error("Specified Locker does not exist");
             } else {
                 lockerToUpdate.set(to);
-                const updatedLocker = await lockerToUpdate.save({transaction: t});
-                return updatedLocker;
+                return lockerToUpdate.save({transaction: t});
             }
         });
     }

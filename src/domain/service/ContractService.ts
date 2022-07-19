@@ -12,8 +12,7 @@ abstract class ContractService {
                 throw new Error("Specified Contract does not exist.");   
             } else {
                 contract.set(to);
-                const updatedContract = await contract.save({transaction: t});
-                return updatedContract;
+                return contract.save({transaction: t});
             }
         });
     }
@@ -36,8 +35,7 @@ abstract class ContractService {
             if(lockerToDestroy == null) {
                 return;
             } else {
-                lockerToDestroy.destroy({transaction: t});
-                return;
+                return lockerToDestroy.destroy({transaction: t});
             }
         });
     }

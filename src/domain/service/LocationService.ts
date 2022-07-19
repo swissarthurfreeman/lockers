@@ -15,9 +15,8 @@ abstract class LocationService {
             const loc = await Location.findByPk(locationId, {transaction: t});
             if(loc == null) {
                 throw new Error("Specified Location does not exist");
-            } else {
-                const updatedLoc = await loc.update(to);
-                return updatedLoc;
+            } else { 
+                return loc.update(to);
             }
         });
     }
