@@ -1,7 +1,8 @@
+import { logger } from "../index";
 import { config } from "../../Config";
 
 const ConfigureHeadersMiddleware = (req: any, res: any, next: any) => {
-    console.log(req.headers);
+    logger.info(req.headers);
     if(config.id == 'test') {
         req.body.user = {
             group: req.headers.oidc_group || ["user"],

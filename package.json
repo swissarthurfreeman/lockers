@@ -7,8 +7,10 @@
     "build": "tsc",
     "postbuild": "./node_modules/.bin/eslint ./dist/**/*.js",
     "prestart": "npm run build",
-    "start": "ts-node-dev src/index.ts",
-    "test": "mocha --timeout 1000 -r ts-node/register test/order.ts"
+    "predev": "npm run build",
+    "dev": "ts-node-dev src/index.ts dev",
+    "start": "node dist/src/index.js production",
+    "test": "mocha --timeout 1000 -r ts-node/register test/order.ts test"
   },
   "repository": {
     "type": "git",
@@ -34,7 +36,8 @@
     "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.21.3",
-    "sequelize-typescript": "^2.1.3"
+    "sequelize-typescript": "^2.1.3",
+    "winston": "^3.8.1"
   },
   "devDependencies": {
     "@types/chai": "^4.3.1",
@@ -43,6 +46,7 @@
     "@types/node": "^18.0.4",
     "@types/supertest": "^2.0.12",
     "@types/validator": "^13.7.4",
+    "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "chai": "^4.3.6",

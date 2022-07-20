@@ -8,6 +8,7 @@ import { LocationRouter } from "./api/rest/LocationRouter";
 import { ContractRouter } from "./api/rest/ContractRouter";
 import { config } from "../Config";
 import { ConfigureHeadersMiddleware } from "./middleware/ConfigureHeaders";
+import winston from "winston";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -29,13 +30,31 @@ app.use('/lockers', LockerRouter);
 app.use('/locations', LocationRouter);
 app.use('/contracts', ContractRouter);
 
+const logger = winston.createLogger({
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.File({ filename: './logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: './logs/info.log', level: 'info' })
+    ]
+});
+
+if(config.id == 'test'  || config.id == 'dev') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple()
+    }));
+}
+
+if(config.id != 'test') {
+    main();
+}
+
 async function main() {
     await sequelize.sync({force: true});
-    console.log("All models were synchronized successfully.");
+    logger.info("All models were synchronized successfully.");
 
     app.listen(port, () => {
-        console.log(`Server started at http://localhost:${port}`);
+        logger.info(`Server started at http://localhost:${port}`);
     });
 }
 
-export { main, app, sequelize };
+export { main, app, sequelize, logger };

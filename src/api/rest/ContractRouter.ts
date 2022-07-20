@@ -3,6 +3,7 @@ import { Locker } from "../../domain/model/Locker";
 import { Location } from "../../domain/model/Location";
 import { Contract } from "../../domain/model/Contract";
 import { ContractService } from "../../domain/service/ContractService";
+import { logger } from "../../index";
 
 const ContractRouter = Router();
 
@@ -29,12 +30,12 @@ ContractRouter.get('/', async (req, res) => {
             })
             .then((contracts: Contract[]) => {
                 if(statuses != null) {
-                    console.log("Statuses were provided");
+                    logger.info("Statuses were provided");
                     const statusList: string[] = statuses.split('.');
-                    console.log(statusList);
+                    logger.info(statusList);
                     const trats: Contract[] = contracts.filter((contract: Contract) => {
-                        console.log(contract.status, statusList);
-                        console.log(contract.status in statusList)
+                        logger.info(contract.status, statusList);
+                        logger.info(contract.status in statusList)
                         return statusList.indexOf(contract.status) != -1;
                     })
                     res.status(200).send(trats);
