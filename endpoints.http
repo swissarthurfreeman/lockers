@@ -16,6 +16,10 @@ oidc_claim_ismemberof: admin
 @locationId = {{locationPost.response.body.$.locationId}}
 
 ###
+DELETE {{host}}/locations/{{locationId}}
+oidc_claim_ismemberof: admin
+
+###
 GET {{host}}/locations
 Content-Type: application/json
 Accept: application/json
@@ -51,11 +55,11 @@ Accept: application/json
 oidc_claim_ismemberof: admin
 
 {
-    "number": 26, 
+    "number": 22, 
     "verticalPosition": "En bas",
     "lock": false,
     "locationId":1,
-    "OutOfServiceReason": "Broken Lock"
+    "dimensions": "100/50/80"
 }
 
 ###
@@ -81,6 +85,22 @@ oidc_claim_email: bilbo@gmail.com
 
 {
     "lockerId": "{{lockerId}}"
+}
+
+### admin creates a locker for someone else
+POST {{host}}/contracts
+Content-Type: application/json
+Accept: application/json
+oidc_claim_given_name: Bilbo
+oidc_claim_family_name: Baggins
+oidc_claim_email: bilbo@gmail.com
+oidc_claim_ismemberof: admin
+
+{
+    "email": "tim@python.co.uk",
+    "firstname": "John",
+    "lastname": "Cleese",
+    "lockerId": "95ac150a-8101-46be-a275-a21318e849b2"
 }
 
 ###

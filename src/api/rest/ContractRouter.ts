@@ -86,23 +86,43 @@ ContractRouter.get('/:id', async (req, res) => {
     }   
 });
 
-// todo : check id is uuid, make it so that a user can only post one contract
-// todo : make sure contract isn't out of service.
 ContractRouter.post('/', (req, res) => {
-    // case where user creates a contract for himself
-    ContractService.create(
-        Contract.build({
-            lockerId: req.body.lockerId,
-            firstname: req.headers.firstname,
-            lastname: req.headers.lastname,
-            email: req.headers.email,
-            expiration: ContractService.getExpirationDate()
-        })
-    ).then((contract: Contract) => {
-        res.status(201).send(contract);
-    }).catch((err) => {        
-        res.status(400).send({message: err.message});
-    });
+    if(req.headers.group != "admin") {  // case where user creates a contract for himself
+        Contract.findOne({where: {email: req.headers.email }})
+            .then((contract: Contract) => {
+                if(contract == null) {
+                    ContractService.create(Contract.build({
+                        lockerId: req.body.lockerId,
+                        firstname: req.headers.firstname,
+                        lastname: req.headers.lastname,
+                        email: req.headers.email,
+                        expiration: ContractService.getExpirationDate()
+                    })
+                    ).then((contract: Contract) => {
+                        res.status(201).send(contract);
+                    }).catch((err) => {        
+                        res.status(400).send({message: err.message});
+                    })
+                } else {
+                    res.status(403).send({message: "Only admins may create multiple contracts with a same user"});
+                }
+            });
+    } else {
+        // case where an admin creates a contract for someone else, user info is in body
+        ContractService.create(
+            Contract.build({
+                lockerId: req.body.lockerId,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                expiration: ContractService.getExpirationDate()
+            })
+        ).then((contract: Contract) => {
+            res.status(201).send(contract);
+        }).catch((err) => {        
+            res.status(400).send({message: err.message});
+        });
+    }
 });
 
 ContractRouter.put('/:id', (req, res) => {

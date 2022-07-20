@@ -11,7 +11,7 @@ const StopUserIllegalActions = (req: any, res: any, next: any) => {
                     res.status(403).send({message: "Users may only update contract expiration in renewal window"});
                 }
             } else {
-                next(); // it's a POST
+                next(); // it's a POST, any user can create a single contract
             }
         } else {
             logger.info("403 Forbidden user action attempt", {headers: req.headers, body: req.body});

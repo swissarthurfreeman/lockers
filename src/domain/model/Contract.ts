@@ -1,10 +1,10 @@
-import { Table, Model, AllowNull, Column} from "sequelize-typescript";
+import { Table, Model, AllowNull, Column, Default} from "sequelize-typescript";
 import { BelongsTo, ForeignKey, PrimaryKey} from "sequelize-typescript";
 import { DataType, Validate, Unique, IsEmail } from "sequelize-typescript";
 import { Locker } from "./Locker";
 import { ContractService } from "../service/ContractService";
 
-@Table({timestamps: false})
+@Table({timestamps: true})
 class Contract extends Model {
     @BelongsTo(() => Locker)
     locker: Locker; // TODO : test to see if returning this as response aggregates the locker into the response too

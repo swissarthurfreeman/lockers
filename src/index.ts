@@ -40,7 +40,7 @@ const logger = winston.createLogger({
     ]
 });
 
-if(config.id == 'test'  || config.id == 'dev') {
+if(config.id === 'test'  || config.id === 'dev') {
     logger.add(new winston.transports.Console({
         format: winston.format.simple()
     }));
@@ -51,7 +51,12 @@ if(config.id != 'test') {
 }
 
 async function main() {
-    await sequelize.sync({force: true});
+    if(config.id === 'test' || config.id === 'dev') {
+        await sequelize.sync({force: true}); 
+    }
+    if(config.id === 'production') {
+        await sequelize.sync({alter: true});    // try to alter, may crash if changes are too large
+    }
     logger.info("All models were synchronized successfully.");
 
     app.listen(port, () => {

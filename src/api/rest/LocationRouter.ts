@@ -50,12 +50,12 @@ LocationRouter.post('/', (req, res) => {
 });
 
 LocationRouter.delete('/:id', (req, res) => {
-    Location.destroy({where: {locationId: req.params.id}})
+    LocationService.delete(req.params.id)
         .then(() => {
             res.status(204).send();
         })
         .catch((err) => {
-            res.status(500).send({message: err.message});
+            res.status(400).send({message: err.message});
         });
 });
 

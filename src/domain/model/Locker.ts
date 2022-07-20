@@ -42,6 +42,11 @@ class Locker extends Model {
     @AllowNull(true)
     @Column
     OutOfServiceReason: string;
+
+    @AllowNull(false)
+    @Default("unspecified")
+    @Column
+    dimensions: string;
 }
 
 export { Locker };
