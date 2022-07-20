@@ -47,7 +47,16 @@ ContractRouter.get('/', async (req, res) => {
                 res.status(400).send({message: err.message});
             })
     } else {    // if it's not an admin, send him just his contract (if he has one)
-        Contract.findAll({where: {email: req.body.user.email}})
+        Contract.findAll({
+            where: {email: req.body.user.email}, 
+            include: [{
+                model: Locker,
+                include: [{
+                    model: Location,
+                    where: req.query
+                }]
+            }]
+        })
             .then((contracts: Contract[]) => {
                 res.status(200).send(contracts);
             })
@@ -64,7 +73,7 @@ ContractRouter.get('/:id', async (req, res) => {
     res.send(contract);
 });
 
-// todo : check id is uuid.
+// todo : check id is uuid, make it so that a user can only post one contract
 ContractRouter.post('/', (req, res) => {
     // case where user creates a contract for himself
     ContractService.create(

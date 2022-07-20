@@ -5,6 +5,7 @@
 POST {{host}}/locations
 Content-Type: application/json
 Accept: application/json
+oidc_claim_ismemberof: admin
 
 {
     "site": "Sciences", 
@@ -29,11 +30,25 @@ GET {{host}}/locations/{{locationId}}
 Content-Type: application/json
 Accept: application/json
 
+### unauthorized lockers post
+POST {{host}}/lockers
+Content-Type: application/json
+Accept: application/json
+
+{
+    "number": 26, 
+    "verticalPosition": "En bas",
+    "lock": false,
+    "locationId":1
+}
+
+
 ###
 # @name lockerPost
 POST {{host}}/lockers
 Content-Type: application/json
 Accept: application/json
+oidc_claim_ismemberof: admin
 
 {
     "number": 26, 
@@ -59,9 +74,9 @@ Accept: application/json
 POST {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
-oidc_name: Bilbo
-oidc_family_name: Baggins
-oidc_email: bilbo@gmail.com
+oidc_claim_given_name: Bilbo
+oidc_claim_family_name: Baggins
+oidc_claim_email: bilbo@gmail.com
 
 {
     "lockerId": "{{lockerId}}"
@@ -71,6 +86,20 @@ oidc_email: bilbo@gmail.com
 GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
+oidc_claim_email: bilbo@gmail.com
+
+###
+GET {{host}}/contracts
+Content-Type: application/json
+Accept: application/json
+oidc_claim_ismemberof: admin
+
+###
+GET {{host}}/contracts
+Content-Type: application/json
+Accept: application/json
+
+
 
 ###
 POST {{host}}/contracts

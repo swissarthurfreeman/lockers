@@ -1,4 +1,5 @@
 import express from "express";
+import winston from "winston";
 import { Sequelize } from "sequelize-typescript";
 import { Contract } from "./domain/model/Contract";
 import { Locker } from "./domain/model/Locker";
@@ -8,7 +9,7 @@ import { LocationRouter } from "./api/rest/LocationRouter";
 import { ContractRouter } from "./api/rest/ContractRouter";
 import { config } from "../Config";
 import { ConfigureHeadersMiddleware } from "./middleware/ConfigureHeaders";
-import winston from "winston";
+import { StopUserIllegalActions } from "./middleware/StopUserIllegalActions";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -24,11 +25,12 @@ const sequelize = new Sequelize({
 const app = express();
 const port = 8080;
 
-app.use(express.json());    // tells express to parse bodies as json
-app.use('*', ConfigureHeadersMiddleware);
-app.use('/lockers', LockerRouter);
-app.use('/locations', LocationRouter);
-app.use('/contracts', ContractRouter);
+app.use(express.json());                        // tells express to parse bodies as json
+app.use('*', ConfigureHeadersMiddleware);       // configure req.body.user with email, name, lastname
+app.use('*', StopUserIllegalActions);           // enforce the following rules on users :
+app.use('/locations', LocationRouter);          // user can only get locations
+app.use('/lockers', LockerRouter);              // user can only get lockers
+app.use('/contracts', ContractRouter);          // user can only update expiration in renewal window
 
 const logger = winston.createLogger({
     format: winston.format.json(),
