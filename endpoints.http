@@ -54,7 +54,8 @@ oidc_claim_ismemberof: admin
     "number": 26, 
     "verticalPosition": "En bas",
     "lock": false,
-    "locationId":1
+    "locationId":1,
+    "OutOfServiceReason": "Broken Lock"
 }
 
 ###

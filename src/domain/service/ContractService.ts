@@ -24,7 +24,11 @@ abstract class ContractService {
             if(locker == null) {
                 throw new Error("Locker does not exist");
             } else {
-                return contract.save({transaction: t});
+                if(locker.OutOfService) {
+                    throw new Error("Locker is out of Service");
+                } else {
+                    return contract.save({transaction: t});
+                }
             }
         });
     }

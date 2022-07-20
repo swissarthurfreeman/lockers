@@ -87,6 +87,7 @@ ContractRouter.get('/:id', async (req, res) => {
 });
 
 // todo : check id is uuid, make it so that a user can only post one contract
+// todo : make sure contract isn't out of service.
 ContractRouter.post('/', (req, res) => {
     // case where user creates a contract for himself
     ContractService.create(

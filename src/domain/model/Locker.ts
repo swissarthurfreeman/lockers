@@ -30,6 +30,18 @@ class Locker extends Model {
     @AllowNull(false)
     @Column
     locationId: number;
+
+    @Column({
+        type: DataType.VIRTUAL,
+        get(this: Locker): boolean {
+            return this.OutOfServiceReason != null  // different from null means OutOfService true
+        }
+    })
+    OutOfService: boolean;
+
+    @AllowNull(true)
+    @Column
+    OutOfServiceReason: string;
 }
 
 export { Locker };
