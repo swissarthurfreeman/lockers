@@ -99,8 +99,6 @@ GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
 
-
-
 ###
 POST {{host}}/contracts
 Content-Type: application/json
@@ -114,6 +112,13 @@ Accept: application/json
 GET {{host}}/contracts/{{lockerId}}
 Content-Type: application/json
 Accept: application/json
+oidc_claim_ismemberof: admin
+
+### if it's the user making the request's locker, return it.
+GET {{host}}/contracts/{{lockerId}}
+Content-Type: application/json
+Accept: application/json
+oidc_claim_email: bilbo@gmail.com   
 
 ###
 DELETE {{host}}/contracts/{{lockerId}}

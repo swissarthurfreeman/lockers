@@ -12,7 +12,7 @@ const ContractRouter = Router();
  * TODO : move to ContractService
  */
 ContractRouter.get('/', async (req, res) => {
-    if(req.body.user.group.indexOf('admin') != -1) {
+    if(req.headers.group === 'admin') {
         let statuses: string = null;
         if("statuses" in req.query) {
             statuses = req.query.statuses.toString();
@@ -48,7 +48,7 @@ ContractRouter.get('/', async (req, res) => {
             })
     } else {    // if it's not an admin, send him just his contract (if he has one)
         Contract.findAll({
-            where: {email: req.body.user.email}, 
+            where: {email: req.headers.email}, 
             include: [{
                 model: Locker,
                 include: [{
@@ -67,10 +67,23 @@ ContractRouter.get('/', async (req, res) => {
 });
 
 ContractRouter.get('/:id', async (req, res) => {
-    const contract = await Contract.findByPk(req.params.id, { include: Locker });
-    if(contract == null)
-        res.status(404);
-    res.send(contract);
+    if(req.headers.group === 'admin') {
+        const contract = await Contract.findByPk(req.params.id, { include: Locker });
+        if(contract == null)
+            res.status(404);
+        res.send(contract); 
+    } else {
+        const contract = await Contract.findByPk(req.params.id, { include: Locker });
+        if(contract == null) {
+            res.status(404).send();
+        } else {
+            if(contract.email != req.headers.email) {
+                res.send([]);
+            } else {
+                res.send(contract);
+            }
+        }
+    }   
 });
 
 // todo : check id is uuid, make it so that a user can only post one contract
@@ -79,9 +92,9 @@ ContractRouter.post('/', (req, res) => {
     ContractService.create(
         Contract.build({
             lockerId: req.body.lockerId,
-            firstname: req.body.user.firstname,
-            lastname: req.body.user.lastname,
-            email: req.body.user.email,
+            firstname: req.headers.firstname,
+            lastname: req.headers.lastname,
+            email: req.headers.email,
             expiration: ContractService.getExpirationDate()
         })
     ).then((contract: Contract) => {

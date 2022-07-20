@@ -1,7 +1,7 @@
 import { logger } from "../index";
 
 const StopUserIllegalActions = (req: any, res: any, next: any) => {
-    if(req.method != 'GET' && req.body.user.group.indexOf("admin") === -1) { // if a user does something that's not a GET
+    if(req.method != 'GET' && req.headers.group != "admin") { // if a user does something that's not a GET
         if( (req.method === 'PUT' || req.method === 'POST') && req.originalUrl === '/contracts' ) {
             logger.info("User is attempting to update/create a contract", {headers: req.headers, body: req.body});
             if(req.method === 'PUT') {

@@ -26,7 +26,7 @@ const app = express();
 const port = 8080;
 
 app.use(express.json());                        // tells express to parse bodies as json
-app.use('*', ConfigureHeadersMiddleware);       // configure req.body.user with email, name, lastname
+app.use('*', ConfigureHeadersMiddleware);       // configure req.headers.group, email lastname...
 app.use('*', StopUserIllegalActions);           // enforce the following rules on users :
 app.use('/locations', LocationRouter);          // user can only get locations
 app.use('/lockers', LockerRouter);              // user can only get lockers
