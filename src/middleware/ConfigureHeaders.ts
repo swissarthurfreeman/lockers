@@ -7,7 +7,7 @@ const ConfigureHeadersMiddleware = (req: any, res: any, next: any) => {
     req.headers.lastname = req.headers.oidc_claim_family_name || "Doe",
     req.headers.email = req.headers.oidc_claim_email || "john@doe.ts"
     
-    if(config.id == 'test' /*|| config.id == 'dev'*/) {
+    if(config.id == 'test' || config.id == 'dev') {
         req.headers.group = 'admin';
     }
 

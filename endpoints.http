@@ -9,7 +9,7 @@ oidc_claim_ismemberof: admin
 
 {
     "site": "Sciences", 
-    "name": "EPA"
+    "name": "Hall"
 }
 
 ###
@@ -43,7 +43,7 @@ Accept: application/json
     "number": 26, 
     "verticalPosition": "En bas",
     "lock": false,
-    "locationId":1
+    "locationId":{{locationId}}
 }
 
 
@@ -58,7 +58,7 @@ oidc_claim_ismemberof: admin
     "number": 22, 
     "verticalPosition": "En bas",
     "lock": false,
-    "locationId":1,
+    "locationId":{{locationId}},
     "dimensions": "100/50/80"
 }
 
@@ -66,7 +66,7 @@ oidc_claim_ismemberof: admin
 @lockerId = {{lockerPost.response.body.$.lockerId}}
 
 ###
-GET {{host}}/lockers
+GET {{host}}/lockers?site=Sciences&name=Hall
 Content-Type: application/json
 Accept: application/json
 
@@ -116,7 +116,7 @@ Accept: application/json
 oidc_claim_ismemberof: admin
 
 ###
-GET {{host}}/contracts
+GET {{host}}/contracts?site=Sciences&name=EPA
 Content-Type: application/json
 Accept: application/json
 
@@ -130,7 +130,7 @@ Accept: application/json
 }
 
 ###
-GET {{host}}/contracts/{{lockerId}}
+GET {{host}}/contracts/26a1fa6d-a873-491a-9135-951a3779058e
 Content-Type: application/json
 Accept: application/json
 oidc_claim_ismemberof: admin

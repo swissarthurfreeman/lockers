@@ -1,4 +1,4 @@
-import { Table, Model, AllowNull, Column, Default} from "sequelize-typescript";
+import { Table, Model, AllowNull, Column } from "sequelize-typescript";
 import { BelongsTo, ForeignKey, PrimaryKey} from "sequelize-typescript";
 import { DataType, Validate, Unique, IsEmail } from "sequelize-typescript";
 import { Locker } from "./Locker";

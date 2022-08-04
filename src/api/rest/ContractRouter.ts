@@ -68,12 +68,12 @@ ContractRouter.get('/', async (req, res) => {
 
 ContractRouter.get('/:id', async (req, res) => {
     if(req.headers.group === 'admin') {
-        const contract = await Contract.findByPk(req.params.id, { include: Locker });
+        const contract = await Contract.findByPk(req.params.id, { include: [{ model: Locker, include: [{ model: Location }]}] });
         if(contract == null)
             res.status(404);
         res.send(contract); 
     } else {
-        const contract = await Contract.findByPk(req.params.id, { include: Locker });
+        const contract = await Contract.findByPk(req.params.id, { include: [{ model: Locker, include: [{ model: Location }]}] });
         if(contract == null) {
             res.status(404).send();
         } else {
