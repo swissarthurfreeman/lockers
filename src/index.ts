@@ -11,7 +11,7 @@ import { config } from "../Config";
 import { ConfigureHeadersMiddleware } from "./middleware/ConfigureHeaders";
 import { StopUserIllegalActions } from "./middleware/StopUserIllegalActions";
 import cors from "cors";
-import { ContractService } from "./domain/service/ContractService";
+import { uploadContracts, uploadLocations, uploadLockers } from "./utils/readCsv";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -55,13 +55,17 @@ if(config.id != 'test') {
 
 async function main() {
     if(config.id === 'test' || config.id === 'dev') {
-        await sequelize.sync({force: true}); 
+        await sequelize.sync({ alter: true }); 
     }
     if(config.id === 'production') {
-        await sequelize.sync({alter: true});    // try to alter, may crash if changes are too large
+        await sequelize.sync({ alter: true });    // try to alter, may crash if changes are too large
+        
     }
     if(config.id === 'dev') {   // default data for development
-        Location.create({site: 'Sciences', name: 'EPA'});
+        //uploadLocations('/home/gordon/Documents/Mandat Casiers/lockers/locations.csv');
+        //uploadLockers('/home/gordon/Documents/Mandat Casiers/lockers/lockers.csv');
+        uploadContracts('/home/gordon/Documents/Mandat Casiers/lockers/contracts.csv');
+        /*Location.create({site: 'Sciences', name: 'EPA'});
         Location.create({site: 'Sciences', name: 'scIII'});
         Location.create({site: 'Battelle', name: 'Hall'});
         Locker.create({
@@ -122,7 +126,7 @@ async function main() {
                 email: "John.Doe@Doe.co",
                 expiration: ContractService.getExpirationDate()
             });
-        });
+        });*/
     }
     logger.info("All models were synchronized successfully.");
 

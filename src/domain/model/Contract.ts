@@ -7,7 +7,7 @@ import { ContractService } from "../service/ContractService";
 @Table({timestamps: true})
 class Contract extends Model {
     @BelongsTo(() => Locker)
-    locker: Locker; // TODO : test to see if returning this as response aggregates the locker into the response too
+    locker: Locker;
 
     @PrimaryKey
     @ForeignKey(() => Locker)

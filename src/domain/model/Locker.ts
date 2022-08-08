@@ -28,8 +28,8 @@ class Locker extends Model {
     @Index({name: 'unique-num-at-loc', type: 'UNIQUE', unique: true})
     @ForeignKey(() => Location)
     @AllowNull(false)
-    @Column
-    locationId: number;
+    @Column(DataType.UUID)
+    locationId: string;
 
     @Column({
         type: DataType.VIRTUAL,
@@ -46,7 +46,7 @@ class Locker extends Model {
     @AllowNull(false)
     @Default("unspecified")
     @Column
-    dimensions: string;
+    dimensions: string;             // widthHeightDepthCm
 }
 
 export { Locker };

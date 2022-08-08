@@ -86,6 +86,7 @@ ContractRouter.get('/:id', async (req, res) => {
     }   
 });
 
+// TODO : move this to service
 ContractRouter.post('/', (req, res) => {
     if(req.headers.group != "admin") {  // case where user creates a contract for himself
         Contract.findOne({where: {email: req.headers.email }})

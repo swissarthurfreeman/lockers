@@ -1,9 +1,17 @@
 services:
-  database:
+  prod_db:
     image: mysql
     restart: always
     environment: 
-      MYSQL_ROOT_PASSWORD: test
-      MYSQL_DATABASE: lockers
+      MYSQL_ROOT_PASSWORD: ${MYSQL_DEVELOPMENT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DEVELOPMENT_DATABASE}
     ports:
-      - 3306:3306
+      - ${MYSQL_DEVELOPMENT_PORT}:3306
+  dev_db:
+    image: mysql
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PRODUCTION_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_PRODUCTION_DATABASE}
+    ports:
+      - ${MYSQL_PRODUCTION_PORT}:3306

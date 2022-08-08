@@ -1,11 +1,11 @@
-import { Table, Model, AllowNull, Index, Column, PrimaryKey, Default, DataType, AutoIncrement } from "sequelize-typescript";
+import { Table, Model, AllowNull, Index, Column, PrimaryKey, DataType, Default } from "sequelize-typescript";
 
 @Table({timestamps: false})
 class Location extends Model {
-    @PrimaryKey
-    @AutoIncrement  // not automatically done for some reason
-    @Column
-    locationId: number;
+    @PrimaryKey        // not automatically done for some reason
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
+    locationId: string;
 
     @Index({name: "unique-site-location", type: 'UNIQUE', unique: true})
     @AllowNull(false)
