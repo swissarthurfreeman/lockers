@@ -78,7 +78,6 @@ describe("Contract Resource Tests", () => {
             
             expect(contractRes.statusCode).equal(400);
         });
-
         
         it("Should not create a contract when locker does not exist", async () => {
             const res = await request(app)

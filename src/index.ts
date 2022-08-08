@@ -11,7 +11,7 @@ import { config } from "../Config";
 import { ConfigureHeadersMiddleware } from "./middleware/ConfigureHeaders";
 import { StopUserIllegalActions } from "./middleware/StopUserIllegalActions";
 import cors from "cors";
-import { uploadAnonContracts, uploadLocations, uploadLockers } from "./utils/readCsv";
+import { populateProdDb, uploadAnonContracts, uploadLocations, uploadLockers } from "./utils/readCsv";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -54,22 +54,18 @@ if(config.id != 'test') {
 }
 
 async function main() {
+
     if(config.id === 'test' || config.id === 'dev') {
         await sequelize.sync({ force: true });  // to reset for tests/dev
         logger.info("All models were synchronized successfully.");
 
-        const locationsPath = '/home/gordon/Documents/Mandat Casiers/lockers/locations.csv';
-        const lockersPath = '/home/gordon/Documents/Mandat Casiers/lockers/lockers.csv';
-        const contractsPath = '/home/gordon/Documents/Mandat Casiers/lockers/contracts.csv';
-
-
-        uploadLocations(locationsPath)
+        uploadLocations(config.sqlConfig.locationsCsvPath)
             .on('end', () => {
                 logger.info('Uploading Locations done, uploading lockers...');
-                uploadLockers(lockersPath)
+                uploadLockers(config.sqlConfig.lockersCsvPath)
                 .on('end', () => {
                     logger.info('Uploading Lockers done, uploading Anonymised contracts...');
-                    uploadAnonContracts(contractsPath)
+                    uploadAnonContracts(config.sqlConfig.contractsCsvPath)
                     .on('end', () => {
                         logger.info("Database successfully uploaded.");
                         app.listen(port, () => {
@@ -82,6 +78,11 @@ async function main() {
 
     if(config.id === 'production') {
         await sequelize.sync({ alter: true });
+        populateProdDb(
+            config.sqlConfig.locationsCsvPath, 
+            config.sqlConfig.lockersCsvPath, 
+            config.sqlConfig.contractsCsvPath
+        );
     }
 }
 

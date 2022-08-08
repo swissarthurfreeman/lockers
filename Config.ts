@@ -5,7 +5,10 @@ const baseSqlConfig = {
     database: process.env.MYSQL_DEVELOPMENT_DATABASE,   
     host: process.env.MYSQL_DEVELOPMENT_HOST,
     user: process.env.MYSQL_DEVELOPMENT_USER,
-    password: process.env.MYSQL_DEVELOPMENT_PASSWORD
+    password: process.env.MYSQL_DEVELOPMENT_PASSWORD,
+    locationsCsvPath: process.env.LOCATIONS_CSV_ABSOLUTE_PATH,
+    lockersCsvPath: process.env.LOCKERS_CSV_ABSOLUTE_PATH,
+    contractsCsvPath: process.env.CONTRACTS_CSV_ABSOLUTE_PATH
 }
 
 const config = {
@@ -19,7 +22,10 @@ const config = {
             host: process.env.MYSQL_PRODUCTION_HOST,
             user: process.env.MYSQL_PRODUCTION_USER,
             password: process.env.MYSQL_PRODUCTION_PASSWORD,
-            database: process.env.MYSQL_PRODUCTION_DATABASE
+            database: process.env.MYSQL_PRODUCTION_DATABASE,
+            locationsCsvPath: process.env.LOCATIONS_CSV_ABSOLUTE_PATH,
+            lockersCsvPath: process.env.LOCKERS_CSV_ABSOLUTE_PATH,
+            contractsCsvPath: process.env.CONTRACTS_CSV_ABSOLUTE_PATH
         }
     },
     test: {
