@@ -74,18 +74,6 @@ function uploadAnonContracts(contractsPath: string): ReadStream {
         });
 }
 
-function populateDevDb(locationsPath: string, lockersPath: string, contractsPath: string): ReadStream {
-    return uploadLocations(locationsPath)
-    .on('end', () => {
-        console.log('Uploading Locations done, uploading lockers...');
-        uploadLockers(lockersPath)
-        .on('end', () => {
-            console.log('Uploading Lockers done, uploading Anonymised contracts...');
-            uploadAnonContracts(contractsPath);
-        })
-    })
-}
-
 function populateProdDb(locationsPath: string, lockersPath: string, contractsPath: string) {
     uploadLocations(locationsPath)
     .on('end', () => {
