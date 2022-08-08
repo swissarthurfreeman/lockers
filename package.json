@@ -10,7 +10,7 @@
     "predev": "npm run build",
     "dev": "ts-node-dev src/index.ts dev",
     "start": "node dist/src/index.js production",
-    "test": "mocha --timeout 5000 -r ts-node/register test/order.ts test"
+    "test": "mocha --timeout 10000 -r ts-node/register test/order.ts test"
   },
   "repository": {
     "type": "git",

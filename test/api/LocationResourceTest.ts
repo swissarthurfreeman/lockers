@@ -16,10 +16,12 @@ describe("Location REST Resource Endpoints Tests", () => {
         it("POST new /locations, should create a new Location", async function() {
             const locationRes = await request(app)
                 .post('/locations')
+                .set('oidc_claim_ismemberof', 'admin')
                 .send({
                     "site": "Mordor",
                     "name": "Mount-Doom"
                 });
+
             expect(locationRes.statusCode).equal(201);
             expect(locationRes.body.site).equal("Mordor");
             expect(locationRes.body.name).equal("Mount-Doom");
@@ -29,6 +31,7 @@ describe("Location REST Resource Endpoints Tests", () => {
         it("POST new /locations at existing site should create a new Location", async function() {
             const locationRes = await request(app)
                 .post('/locations')
+                .set('oidc_claim_ismemberof', 'admin')
                 .send({
                     "site": "Mordor",
                     "name": "Porte d'entrée"
@@ -41,6 +44,7 @@ describe("Location REST Resource Endpoints Tests", () => {
         it("POST /locations, of location with same name but different site than another should create the location", async () => {
             const dupLocationRes = await request(app)
                 .post('/locations')
+                .set('oidc_claim_ismemberof', 'admin')
                 .send({
                     "site": "Minas-Tirith",
                     "name": "Porte d'entrée"
@@ -52,6 +56,7 @@ describe("Location REST Resource Endpoints Tests", () => {
         it("POST duplicate /locations, should yield an error", async () => {
             const dupLocationRes = await request(app)
                 .post('/locations')
+                .set('oidc_claim_ismemberof', 'admin')
                 .set("Content-Type", "application/json; charset=utf-8")
                 .set("Accept", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
@@ -83,6 +88,7 @@ describe("Location REST Resource Endpoints Tests", () => {
             expect(res.body.length).equal(2);
         });
     });
+    
     describe("/locations/:id endpoint test", () => {
         it("GET /locations/:id, should return specific location object by id", async function() {
             const res = await request(app)
@@ -95,6 +101,7 @@ describe("Location REST Resource Endpoints Tests", () => {
         it("PUT /locations/:id, should update location properties", async function() {
             const res = await request(app)
                 .put('/locations/' + MinasTirithGateLocationId)
+                .set('oidc_claim_ismemberof', 'admin')
                 .send({
                     "name": "Gate"
                 });
@@ -106,6 +113,7 @@ describe("Location REST Resource Endpoints Tests", () => {
         it("PUT /locations/:id, to a name that already exists at the site yields an error",  async function() {
             const res = await request(app)
                 .put('/locations/' + MordorMountDoomLocationId)
+                .set('oidc_claim_ismemberof', 'admin')
                 .send({
                     "name": "Porte d'entrée"
                 });
@@ -114,7 +122,10 @@ describe("Location REST Resource Endpoints Tests", () => {
         });
     
         it("DELETE /locations/:id, should delete location", async function() {
-            const delRes = await request(app).delete('/locations/' + MordorMountDoomLocationId)
+            const delRes = await request(app)
+                .delete('/locations/' + MordorMountDoomLocationId)
+                .set('oidc_claim_ismemberof', 'admin')
+            
             expect(delRes.status).equal(204);
             const locationsAtMordor = await request(app).get('/locations?site=Mordor');     
             expect(locationsAtMordor.body.length).equal(1);

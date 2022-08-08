@@ -78,7 +78,7 @@ LockerRouter.put('/:id', (req, res) => {
 LockerRouter.delete('/:id', (req, res) => {
     LockerService.destroy(req.params.id)
         .then(() => {
-            res.status(200).send({message: "Locker successfully removed"});
+            res.status(204).send();
         })
         .catch((err) => {
             res.status(400).send({message: err.message});
