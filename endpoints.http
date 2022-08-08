@@ -8,6 +8,7 @@ Accept: application/json
 oidc_claim_ismemberof: admin
 
 {
+    "locationId": 17,
     "site": "Sciences", 
     "name": "Hall"
 }
@@ -40,6 +41,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
+    "lockerId": "sdghsdkjlghsdjkghdsjlkgh",
     "number": 26, 
     "verticalPosition": "En bas",
     "lock": false,
@@ -66,7 +68,7 @@ oidc_claim_ismemberof: admin
 @lockerId = {{lockerPost.response.body.$.lockerId}}
 
 ###
-GET {{host}}/lockers?site=Sciences&name=Hall
+GET {{host}}/lockers
 Content-Type: application/json
 Accept: application/json
 
@@ -97,10 +99,10 @@ oidc_claim_email: bilbo@gmail.com
 oidc_claim_ismemberof: admin
 
 {
-    "email": "tim@python.co.uk",
+    "email": "john@doe.ts",
     "firstname": "John",
-    "lastname": "Cleese",
-    "lockerId": "95ac150a-8101-46be-a275-a21318e849b2"
+    "lastname": "Doe",
+    "lockerId": "2dad83f6-2fb3-43c6-97fe-5e97056dce6d"
 }
 
 ###
@@ -136,7 +138,7 @@ Accept: application/json
 oidc_claim_ismemberof: admin
 
 ### if it's the user making the request's locker, return it.
-GET {{host}}/contracts/{{lockerId}}
+GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
 oidc_claim_email: bilbo@gmail.com   
