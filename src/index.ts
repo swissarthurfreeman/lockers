@@ -83,6 +83,9 @@ async function main() {
             config.sqlConfig.lockersCsvPath, 
             config.sqlConfig.contractsCsvPath
         );
+        app.listen(port, () => {
+            logger.info(`Server started at http://localhost:${port}`);
+        });
     }
 }
 

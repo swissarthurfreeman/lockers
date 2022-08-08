@@ -47,7 +47,7 @@ function uploadContracts(contractsPath: string): ReadStream {
             const builtContr: Contract = Contract.build(contr);
             ContractService.create(builtContr)
             .catch((err) => {
-                if(err.name != 'SequelizeUniqueConstraintError') {
+                if(err.name != 'SequelizeUniqueConstraintError' && err.message != 'Locker does not exist') {
                     console.log("Error saving contract", err );
                 }
             });
