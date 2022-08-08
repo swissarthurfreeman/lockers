@@ -17,6 +17,18 @@ abstract class ContractService {
         });
     }
 
+    public static async renew(lockerId: string): Promise<Contract> {
+        return sequelize.transaction( async (t) => {
+            const contract = await Contract.findByPk(lockerId, {transaction: t});
+            if(contract == null) {
+                throw new Error("Specified Contract does not exist.");
+            } else {
+                contract.set("expiration", this.getExpirationDate());
+                return contract.save({ transaction: t });
+            }
+        });
+    }
+
     public static async create(contract: Contract): Promise<Contract> {
         // returns last return value of nested callback, if rejected throws an error.
         return sequelize.transaction(async (t) => {

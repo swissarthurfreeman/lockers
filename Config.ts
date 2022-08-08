@@ -12,7 +12,7 @@ const config = {
     production: {
         id: 'production',
         contractExpirationDate: '-05-15',  // les contrats expirent le 15 mai à minuit.
-        contractRenewalDeadline: '-06-30', // les contrats se renouvellent juqu'au 30 Juin à minuit et passent en colonisé.
+        contractRenewalDeadline: '-08-30', // les contrats se renouvellent juqu'au 30 Juin à minuit et passent en colonisé.
         port: process.env.NODE_PORT,
         sqlConfig: {
             port: parseInt(process.env.MYSQL_PRODUCTION_PORT),
@@ -32,7 +32,7 @@ const config = {
     dev: {
         id: 'dev',
         contractExpirationDate: '-05-15',
-        contractRenewalDeadline: '-06-30',
+        contractRenewalDeadline: '-08-30',
         port: process.env.NODE_PORT,
         sqlConfig: baseSqlConfig
     }

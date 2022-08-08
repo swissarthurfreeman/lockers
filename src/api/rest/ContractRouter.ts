@@ -96,7 +96,7 @@ ContractRouter.post('/', (req, res) => {
                         lockerId: req.body.lockerId,
                         firstname: req.headers.firstname,
                         lastname: req.headers.lastname,
-                        email: req.headers.email,
+                        email: req.headers.email,   // if expiration was provided, take it, or else compute it
                         expiration: ContractService.getExpirationDate()
                     })
                     ).then((contract: Contract) => {
@@ -116,7 +116,7 @@ ContractRouter.post('/', (req, res) => {
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
                 email: req.body.email,
-                expiration: ContractService.getExpirationDate()
+                expiration: req.body.expiration != undefined ? req.body.expiration : ContractService.getExpirationDate()
             })
         ).then((contract: Contract) => {
             res.status(201).send(contract);
@@ -127,13 +127,31 @@ ContractRouter.post('/', (req, res) => {
 });
 
 ContractRouter.put('/:id', (req, res) => {
-    ContractService.update(req.params.id, req.body)
-        .then((updatedContract) => {
-            res.status(200).send(updatedContract);
-        })
-        .catch((err) => {
-            res.status(400).send({message: err.message});
-        });
+    if(req.headers.group != "admin" || Object.keys(req.body).length === 0) {
+        ContractService.renew(req.params.id)
+            .then((renewedContract) => {
+                Contract.findByPk(renewedContract.lockerId, {include: [
+                    {
+                        model: Locker,
+                        include: [{
+                            model: Location,
+                            where: req.query
+                        }]
+                    }]})
+                .then((contr) => { res.status(200).send(contr); });
+            })
+            .catch((err) => {
+                res.status(400).send({message: err.message});
+            });
+    } else {
+        ContractService.update(req.params.id, req.body)
+            .then((updatedContract) => {
+                res.status(200).send(updatedContract);
+            })
+            .catch((err) => {
+                res.status(400).send({message: err.message});
+            });
+    }
 });
 
 ContractRouter.delete('/:id', (req, res) => {

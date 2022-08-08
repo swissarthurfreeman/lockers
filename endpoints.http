@@ -68,12 +68,12 @@ oidc_claim_ismemberof: admin
 @lockerId = {{lockerPost.response.body.$.lockerId}}
 
 ###
-GET {{host}}/lockers
+GET {{host}}/lockers?site=Bastions
 Content-Type: application/json
 Accept: application/json
 
 ###
-GET {{host}}/lockers/{{lockerId}}
+GET {{host}}/lockers/1ee00449-330a-11ec-ab1d-5254004e4f4c
 Content-Type: application/json
 Accept: application/json
 
@@ -102,17 +102,33 @@ oidc_claim_ismemberof: admin
     "email": "john@doe.ts",
     "firstname": "John",
     "lastname": "Doe",
-    "lockerId": "2dad83f6-2fb3-43c6-97fe-5e97056dce6d"
+    "lockerId": "1ee00449-330a-11ec-ab1d-5254004e4f4c",
+    "expiration": "2022-05-15"
 }
+
+###
+DELETE {{host}}/contracts/1ee00449-330a-11ec-ab1d-5254004e4f4c
+Content-Type: application/json
+Accept: application/json
+oidc_claim_ismemberof: admin
+
+###
+PUT {{host}}/contracts/1ee00449-330a-11ec-ab1d-5254004e4f4c
+Content-Type: application/json
+Accept: application/json
+oidc_claim_ismemberof: admin
+
+{}
+
 
 ###
 GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
-oidc_claim_email: bilbo@gmail.com
+oidc_claim_email: john@doe.ts
 
 ###
-GET {{host}}/contracts
+GET {{host}}/contracts/1ee00449-330a-11ec-ab1d-5254004e4f4c
 Content-Type: application/json
 Accept: application/json
 oidc_claim_ismemberof: admin
@@ -141,12 +157,9 @@ oidc_claim_ismemberof: admin
 GET {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
-oidc_claim_email: bilbo@gmail.com   
+oidc_claim_email: john@doe.ts
 
-###
-DELETE {{host}}/contracts/{{lockerId}}
-Content-Type: application/json
-Accept: application/json
+
 
 ###
 DELETE {{host}}/lockers/{{lockerId}}

@@ -1,5 +1,5 @@
 services:
-  prod_db:
+  dev_db:
     image: mysql
     restart: always
     environment: 
@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DEVELOPMENT_DATABASE}
     ports:
       - ${MYSQL_DEVELOPMENT_PORT}:3306
-  dev_db:
+  prod_db:
     image: mysql
     restart: always
     environment: 

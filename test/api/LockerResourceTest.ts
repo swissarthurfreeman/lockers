@@ -1,9 +1,19 @@
 import { expect } from "chai";
 import { describe, it } from "mocha";
 import request from "supertest";
-import { app } from "../../src/index";
+import { Contract } from "../../src/domain/model/Contract";
+import { Locker } from "../../src/domain/model/Locker";
+import { Location } from "../../src/domain/model/Location";
+import { main, app } from "../../src/index";
 
 describe("Locker REST Resource Endpoints Tests", async () => {
+    before(async () => {
+        await main();
+        await Contract.destroy({where: {}})
+        await Locker.destroy({where: {}});
+        await Location.destroy({where: {}});
+    });
+    
     const mordorLocation = (await request(app)
         .get('/locations?site=Mordor&name=TowerOfFire')
         .set("Content-Type", "application/json; charset=utf-8")

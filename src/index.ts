@@ -11,7 +11,7 @@ import { config } from "../Config";
 import { ConfigureHeadersMiddleware } from "./middleware/ConfigureHeaders";
 import { StopUserIllegalActions } from "./middleware/StopUserIllegalActions";
 import cors from "cors";
-import { uploadContracts, uploadLocations, uploadLockers } from "./utils/readCsv";
+import { uploadAnonContracts, uploadLocations, uploadLockers } from "./utils/readCsv";
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
@@ -43,7 +43,7 @@ const logger = winston.createLogger({
     ]
 });
 
-if(config.id === 'test'  || config.id === 'dev') {
+if(config.id === 'dev') {
     logger.add(new winston.transports.Console({
         format: winston.format.simple()
     }));
@@ -55,84 +55,34 @@ if(config.id != 'test') {
 
 async function main() {
     if(config.id === 'test' || config.id === 'dev') {
-        await sequelize.sync({ alter: true }); 
-    }
-    if(config.id === 'production') {
-        await sequelize.sync({ alter: true });    // try to alter, may crash if changes are too large
-        
-    }
-    if(config.id === 'dev') {   // default data for development
-        //uploadLocations('/home/gordon/Documents/Mandat Casiers/lockers/locations.csv');
-        //uploadLockers('/home/gordon/Documents/Mandat Casiers/lockers/lockers.csv');
-        uploadContracts('/home/gordon/Documents/Mandat Casiers/lockers/contracts.csv');
-        /*Location.create({site: 'Sciences', name: 'EPA'});
-        Location.create({site: 'Sciences', name: 'scIII'});
-        Location.create({site: 'Battelle', name: 'Hall'});
-        Locker.create({
-            "number": 1, 
-            "verticalPosition": "En haut",
-            "lock": false,
-            "locationId":1,
-            "dimensions": "100/50/80"
-        });
-        Locker.create({
-            "number": 5, 
-            "verticalPosition": "En bas",
-            "lock": true,
-            "locationId":1,
-            "dimensions": "100/50/80"
-        });
-        Locker.create({
-            "number": 22, 
-            "verticalPosition": "mi-hauteur",
-            "lock": true,
-            "locationId":1,
-            "dimensions": "100/50/80"
-        }).then((locker) => {
-            Contract.create({
-                lockerId: locker.lockerId,
-                firstname: "Breach",
-                lastname: "Wayne",
-                email: "gordon@gotham.pd.us",
-                expiration: '2022-05-15'
-            });
-        });
-        Locker.create({
-            "number": 30, 
-            "verticalPosition": "mi-hauteur",
-            "lock": true,
-            "locationId":1,
-            "dimensions": "100/50/80"
-        }).then((locker) => {
-            Contract.create({
-                lockerId: locker.lockerId,
-                firstname: "Mark",
-                lastname: "Walter",
-                email: "Walter.Mart@Marty.Who",
-                expiration: ContractService.getExpirationDate()
-            });
-        });
-        Locker.create({
-            "number": 31, 
-            "verticalPosition": "mi-hauteur",
-            "lock": true,
-            "locationId":1,
-            "dimensions": "100/50/80"
-        }).then((locker) => {
-            Contract.create({
-                lockerId: locker.lockerId,
-                firstname: "John",
-                lastname: "Doe",
-                email: "John.Doe@Doe.co",
-                expiration: ContractService.getExpirationDate()
-            });
-        });*/
-    }
-    logger.info("All models were synchronized successfully.");
+        await sequelize.sync({ force: true });  // to reset for tests/dev
+        logger.info("All models were synchronized successfully.");
 
-    app.listen(port, () => {
-        logger.info(`Server started at http://localhost:${port}`);
-    });
+        const locationsPath = '/home/gordon/Documents/Mandat Casiers/lockers/locations.csv';
+        const lockersPath = '/home/gordon/Documents/Mandat Casiers/lockers/lockers.csv';
+        const contractsPath = '/home/gordon/Documents/Mandat Casiers/lockers/contracts.csv';
+
+
+        uploadLocations(locationsPath)
+            .on('end', () => {
+                logger.info('Uploading Locations done, uploading lockers...');
+                uploadLockers(lockersPath)
+                .on('end', () => {
+                    logger.info('Uploading Lockers done, uploading Anonymised contracts...');
+                    uploadAnonContracts(contractsPath)
+                    .on('end', () => {
+                        logger.info("Database successfully uploaded.");
+                        app.listen(port, () => {
+                            logger.info(`Server started at http://localhost:${port}`);
+                        });
+                    });
+                });
+            });
+    }
+
+    if(config.id === 'production') {
+        await sequelize.sync({ alter: true });
+    }
 }
 
 export { main, app, sequelize, logger };
