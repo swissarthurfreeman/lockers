@@ -1,5 +1,15 @@
 @host = http://127.0.0.1:8080
 
+# how to find out who you are to the eyes of the app
+GET {{host}}/whoami
+Content-Type: application/json
+Accept: application/json
+#oidc_claim_given_name: Bilbo
+#oidc_claim_family_name: Baggins
+#oidc_claim_email: bilbo@gmail.com
+#oidc_claim_ismemberof: admin
+
+
 ###
 # @name locationPost
 POST {{host}}/locations
@@ -8,9 +18,8 @@ Accept: application/json
 oidc_claim_ismemberof: admin
 
 {
-    "locationId": 17,
-    "site": "Sciences", 
-    "name": "Hall"
+    "site": "Mordor", 
+    "name": "Tower"
 }
 
 ###
@@ -39,13 +48,14 @@ Accept: application/json
 POST {{host}}/lockers
 Content-Type: application/json
 Accept: application/json
+oidc_claim_ismemberof: admin
 
 {
     "lockerId": "sdghsdkjlghsdjkghdsjlkgh",
     "number": 26, 
     "verticalPosition": "En bas",
     "lock": false,
-    "locationId":{{locationId}}
+    "locationId":"aae5248e-e1a8-4695-ad66-0740392fd2b6"
 }
 
 
@@ -60,7 +70,7 @@ oidc_claim_ismemberof: admin
     "number": 22, 
     "verticalPosition": "En bas",
     "lock": false,
-    "locationId":{{locationId}},
+    "locationId":"aae5248e-e1a8-4695-ad66-0740392fd2b6",
     "dimensions": "100/50/80"
 }
 
@@ -68,7 +78,7 @@ oidc_claim_ismemberof: admin
 @lockerId = {{lockerPost.response.body.$.lockerId}}
 
 ###
-GET {{host}}/lockers?site=Bastions
+GET {{host}}/lockers/0dee87d4-4393-11ec-92ab-5254004e4f4c
 Content-Type: application/json
 Accept: application/json
 
@@ -81,9 +91,6 @@ Accept: application/json
 POST {{host}}/contracts
 Content-Type: application/json
 Accept: application/json
-oidc_claim_given_name: Bilbo
-oidc_claim_family_name: Baggins
-oidc_claim_email: bilbo@gmail.com
 
 {
     "lockerId": "{{lockerId}}"
@@ -122,7 +129,7 @@ oidc_claim_ismemberof: admin
 
 
 ###
-GET {{host}}/contracts
+GET {{host}}/contracts?site=Sciences&name=SCII
 Content-Type: application/json
 Accept: application/json
 oidc_claim_email: john@doe.ts
@@ -154,7 +161,7 @@ Accept: application/json
 oidc_claim_ismemberof: admin
 
 ### if it's the user making the request's locker, return it.
-GET {{host}}/contracts
+GET {{host}}/contracts?Site=Sciences
 Content-Type: application/json
 Accept: application/json
 oidc_claim_email: john@doe.ts
@@ -167,6 +174,6 @@ Content-Type: application/json
 Accept: application/json
 
 ###
-GET {{host}}/lockers
+GET {{host}}/lockers?site=Sciences
 Content-Type: application/json
 Accept: application/json
