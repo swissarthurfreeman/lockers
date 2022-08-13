@@ -19,14 +19,16 @@ ContractRouter.get('/', async (req, res) => {
             delete req.query.statuses;
         }
         Contract.findAll({
-                include: [
-                    {
-                        model: Locker,
-                        include: [{
+                include: [{
+                    model: Locker,
+                    required: true, // FUCKING MANDATORY, OR ELSE IT DOES INNER JOIN AARRGGGH
+                    include: [
+                        {
                             model: Location,
                             where: req.query
-                        }]
-                    }]
+                        }
+                    ]
+                }]
             })
             .then((contracts: Contract[]) => {
                 if(statuses != null) {
@@ -40,6 +42,7 @@ ContractRouter.get('/', async (req, res) => {
                     })
                     res.status(200).send(trats);
                 } else {
+                    console.log(contracts[0]);
                     res.status(200).send(contracts);
                 }
             })

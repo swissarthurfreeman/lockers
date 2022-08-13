@@ -35,6 +35,15 @@ app.use('/locations', LocationRouter);          // user can only get locations
 app.use('/lockers', LockerRouter);              // user can only get lockers
 app.use('/contracts', ContractRouter);          // user can only update expiration in renewal window
 
+app.get('/whoami', (req, res) => {
+    res.send({ 
+        'group': req.headers.group || 'user', 
+        'lastname': req.headers.lastname, 
+        'firstname': req.headers.firstname,
+        'email': req.headers.email
+    })
+})
+
 const logger = winston.createLogger({
     format: winston.format.json(),
     transports: [
@@ -78,11 +87,7 @@ async function main() {
 
     if(config.id === 'production') {
         await sequelize.sync({ alter: true });
-        populateProdDb(
-            config.sqlConfig.locationsCsvPath, 
-            config.sqlConfig.lockersCsvPath, 
-            config.sqlConfig.contractsCsvPath
-        );
+        
         app.listen(port, () => {
             logger.info(`Server started at http://localhost:${port}`);
         });
