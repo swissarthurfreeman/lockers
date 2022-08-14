@@ -1,0 +1,16 @@
+
+> lockers@1.0.0 prestart
+> npm run build
+
+
+> lockers@1.0.0 build
+> tsc
+
+
+> lockers@1.0.0 postbuild
+> ./node_modules/.bin/eslint ./dist/**/*.js
+
+
+> lockers@1.0.0 start
+> node dist/src/index.js production
+
