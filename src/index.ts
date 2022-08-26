@@ -27,7 +27,7 @@ const sequelize = new Sequelize({
 const app = express();
 const port = 8080;
 
-app.use(cors())
+app.use(cors({origin: true}))
 app.use(express.json());                        // tells express to parse bodies as json
 app.use('*', ConfigureHeadersMiddleware);       // configure req.headers.group, email lastname...
 app.use('*', StopUserIllegalActions);           // enforce the following rules on users :

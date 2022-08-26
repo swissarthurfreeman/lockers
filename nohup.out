@@ -14,3 +14,7 @@
 > lockers@1.0.0 start
 > node dist/src/index.js production
 
+
+> lockers@1.0.0 prod
+> node dist/src/index.js production
+

@@ -4,4 +4,4 @@ dist
 logs
 *.sql
 *.csv
-
+*.out
