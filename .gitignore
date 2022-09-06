@@ -4,4 +4,7 @@ dist
 logs
 *.sql
 *.csv
+coverage
+.scannerwork
+.nyc_output
 *.out
