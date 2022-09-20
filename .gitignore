@@ -1,9 +1,8 @@
-node_modules
 dist
+node_modules
 .env
 logs
 *.sql
-*.csv
 coverage
 .scannerwork
 .nyc_output
