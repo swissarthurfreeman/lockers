@@ -2,6 +2,10 @@
 
 ## Overview
 
+The goal of this application is to manage a set of lockers within an institution. A locker has a certain size, works with a padlock or a key and is at a certain location. Users can rent out lockers for predefined period of time. (In an academic context, it is for a semester). This application provides the functionality to automate locker rentals, manage and compute contract expirations avoiding unnecessary paperwork. 
+
+This backend application exposes a REST api to be queried by the front end for managing lockers, contracts and localisations (see domain model). 
+
 This project uses Node.js with npm and Typescript.
 To run this project please type ```npm run start``` in the same directory as ```package.json```.
 
